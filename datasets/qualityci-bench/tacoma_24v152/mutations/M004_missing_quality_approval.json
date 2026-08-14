@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M004_MISSING_QUALITY_APPROVAL",
+  "description": "高风险变更只有工艺负责人批准，缺质量负责人。",
+  "operations": [
+    {"op": "set", "target": "event", "path": "approvals", "value": [{"role": "PROCESS_OWNER", "decision": "APPROVED", "event_revision": "2", "approved_at": "2024-02-01"}]}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "CONTRADICTED"
+  }
+}

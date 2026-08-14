@@ -1,0 +1,377 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/case.schema.json",
+  "title": "QualityCI Case",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "case_id", "synthetic_for_competition", "event", "documents"],
+  "properties": {
+    "schema_version": {"const": "qualityci-case-0.4"},
+    "case_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "title": {"type": "string"},
+    "synthetic_for_competition": {"const": true},
+    "source_provenance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "url", "use"],
+        "properties": {
+          "type": {"type": "string"},
+          "url": {"type": "string", "format": "uri"},
+          "use": {"type": "string"}
+        }
+      }
+    },
+    "event": {"$ref": "#/$defs/event"},
+    "relationship_migration": {"$ref": "#/$defs/relationshipMigration"},
+    "reference_migration": {"$ref": "#/$defs/referenceMigration"},
+    "validation_migration": {"$ref": "#/$defs/validationMigration"},
+    "documents": {
+      "type": "array",
+      "minItems": 5,
+      "items": {"$ref": "#/$defs/document"},
+      "allOf": [
+        {"contains": {"properties": {"document_type": {"const": "PROCESS_FLOW"}, "status": {"const": "APPROVED"}}, "required": ["document_type", "status"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"document_type": {"const": "PFMEA"}, "status": {"const": "APPROVED"}}, "required": ["document_type", "status"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"document_type": {"const": "CONTROL_PLAN"}, "status": {"const": "APPROVED"}}, "required": ["document_type", "status"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"document_type": {"const": "SOP"}, "status": {"const": "APPROVED"}}, "required": ["document_type", "status"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"document_type": {"const": "INSPECTION_RECORD"}, "status": {"const": "APPROVED"}}, "required": ["document_type", "status"]}, "minContains": 1, "maxContains": 1}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "not": {"required": ["relationship_migration"]}
+      },
+      "then": {
+        "properties": {
+          "documents": {
+            "items": {
+              "properties": {
+                "fields": {
+                  "properties": {
+                    "characteristics": {
+                      "items": {"required": ["process_step_id"]}
+                    },
+                    "risks": {
+                      "items": {"required": ["process_step_id"]}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "event": {
+      "type": "object",
+      "required": ["event_id", "event_type", "revision", "risk_level", "affected_process_steps", "affected_characteristics"],
+      "properties": {
+        "event_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "event_type": {"enum": ["ENGINEERING_CHANGE", "QUALITY_EVENT"]},
+        "revision": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "approved_at": {"type": "string", "format": "date"},
+        "risk_level": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+        "affected_process_steps": {"type": "array", "items": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"}},
+        "affected_characteristics": {"type": "array", "items": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"}},
+        "affected_links": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/affectedLink"}
+        },
+        "change_summary": {"type": "string"},
+        "validation_evidence": {"type": "array", "items": {"$ref": "#/$defs/validationEvidence"}},
+        "validation_plan": {"$ref": "#/$defs/validationPlan"},
+        "approvals": {
+          "type": "array",
+          "uniqueItems": true,
+          "x-uniqueBy": ["role", "event_revision"],
+          "items": {"$ref": "#/$defs/approval"}
+        }
+      }
+    },
+    "document": {
+      "type": "object",
+      "required": ["document_id", "document_type", "revision", "status", "owner", "revision_date", "source_hash", "fields"],
+      "properties": {
+        "document_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "document_type": {"enum": ["PROCESS_FLOW", "PFMEA", "CONTROL_PLAN", "SOP", "INSPECTION_RECORD"]},
+        "revision": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "status": {"enum": ["DRAFT", "APPROVED", "SUPERSEDED"]},
+        "owner": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "revision_date": {"type": "string", "format": "date"},
+        "source_hash": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": ".*\\S.*"},
+        "source": {"type": "object"},
+        "mapping_provenance": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/mappingProvenance"}
+        },
+        "revision_artifact": {"$ref": "#/$defs/revisionArtifact"},
+        "reference_contract_version": {"const": "qualityci-controlled-reference-0.1"},
+        "approved_waiver": {"$ref": "#/$defs/waiver"},
+        "fields": {
+          "type": "object",
+          "properties": {
+            "process_steps": {"type": "array", "items": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"}},
+            "characteristics": {
+              "type": "array",
+              "uniqueItems": true,
+              "x-uniqueBy": "characteristic_id",
+              "items": {"$ref": "#/$defs/characteristic"}
+            },
+            "risks": {"type": "array", "items": {"$ref": "#/$defs/risk"}},
+            "references": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": {"$ref": "#/$defs/controlledReference"}
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["LEGACY_UNATTESTED"],
+                  "properties": {
+                    "LEGACY_UNATTESTED": {
+                      "type": "object",
+                      "additionalProperties": {"type": "string", "minLength": 1}
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "mappingProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mapping_kind", "target", "value"],
+      "properties": {
+        "mapping_kind": {"enum": ["DIRECT_CELL_VALUE", "DERIVED_LOCATOR", "AGGREGATED_IDENTICAL_VALUES", "DERIVED_REFERENCE_IDENTITY"]},
+        "target": {"type": "string", "minLength": 1},
+        "value": {},
+        "derivation_contract": {"type": "string", "minLength": 1},
+        "anchor_target": {"type": "string", "minLength": 1},
+        "conversion_contract": {"type": "string", "minLength": 1},
+        "aggregation_contract": {"type": "string", "minLength": 1},
+        "reference_role": {"type": "string", "minLength": 1},
+        "target_document_id": {"type": "string", "minLength": 1},
+        "target_revision": {"type": "string", "minLength": 1},
+        "target_source_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "sources": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/mappingSource"}},
+        "source": {
+          "$ref": "#/$defs/mappingSource"
+        }
+      },
+      "oneOf": [
+        {"properties": {"mapping_kind": {"const": "DIRECT_CELL_VALUE"}}, "required": ["source", "conversion_contract"]},
+        {"properties": {"mapping_kind": {"const": "DERIVED_LOCATOR"}}, "required": ["source", "derivation_contract", "anchor_target"]},
+        {"properties": {"mapping_kind": {"const": "AGGREGATED_IDENTICAL_VALUES"}}, "required": ["sources", "aggregation_contract", "conversion_contract"]},
+        {"properties": {"mapping_kind": {"const": "DERIVED_REFERENCE_IDENTITY"}}, "required": ["reference_role", "target_document_id", "target_revision", "target_source_hash", "derivation_contract"]}
+      ]
+    },
+    "mappingSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "document_id", "source_hash", "locator", "kind", "coordinates", "column", "raw_value"],
+      "properties": {
+        "source_id": {"type": "string"},
+        "document_id": {"type": "string"},
+        "source_hash": {"type": "string"},
+        "locator": {"type": "string"},
+        "kind": {"type": "string"},
+        "coordinates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["row", "column"],
+          "properties": {"row": {"type": "integer", "minimum": 1}, "column": {"type": "integer", "minimum": 1}}
+        },
+        "column": {"type": "string"},
+        "raw_value": {"type": "string"}
+      }
+    },
+    "revisionArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_version", "artifact_id", "replacement_set_id", "artifact_set_hash", "case_schema_version", "parser_contract_version", "mapping_contract_version", "security_root_policy_version", "supersedes", "attestation"],
+      "properties": {
+        "contract_version": {"const": "qualityci-revision-artifact-0.3"},
+        "artifact_id": {"pattern": "^sha256:[0-9a-f]{64}$"},
+        "replacement_set_id": {"type": "string", "minLength": 1},
+        "artifact_set_hash": {"pattern": "^[0-9a-f]{64}$"},
+        "case_schema_version": {"const": "qualityci-case-0.4"},
+        "parser_contract_version": {"const": "qualityci-ingestion-policy-0.2"},
+        "mapping_contract_version": {"const": "qualityci-explicit-mapping-0.5"},
+        "security_root_policy_version": {"const": "qualityci-artifact-root-policy-0.1"},
+        "supersedes": {
+          "type": "object",
+          "required": ["document_id", "revision", "source_hash"],
+          "properties": {"document_id": {"type": "string"}, "revision": {"type": "string"}, "source_hash": {"type": "string"}}
+        },
+        "attestation": {"type": "string"}
+      }
+    },
+    "controlledReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["document_type", "document_id", "revision", "source_hash"],
+      "properties": {
+        "document_type": {"type": "string", "minLength": 1},
+        "document_id": {"type": "string", "minLength": 1},
+        "revision": {"type": "string", "minLength": 1},
+        "source_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "characteristic": {
+      "type": "object",
+      "required": ["characteristic_id", "locator"],
+      "properties": {
+        "process_step_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "control_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "characteristic_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "specification": {
+          "type": "object",
+          "properties": {
+            "target": {"type": "number"},
+            "minimum": {"type": "number"},
+            "maximum": {"type": "number"},
+            "unit": {"type": "string"}
+          }
+        },
+        "control_method": {"type": "string"},
+        "frequency": {"type": "string"},
+        "reaction_plan": {"type": "string"},
+        "locator": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"}
+      }
+    },
+    "risk": {
+      "type": "object",
+      "required": ["failure_mode_id", "characteristic_id", "special_characteristic", "locator"],
+      "properties": {
+        "failure_mode_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "process_step_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "characteristic_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "special_characteristic": {"type": "boolean"},
+        "effect": {"type": "string"},
+        "locator": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"}
+      }
+    },
+    "affectedLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["process_step_id", "characteristic_id"],
+      "properties": {
+        "process_step_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "characteristic_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"}
+      }
+    },
+    "relationshipMigration": {
+      "type": "object",
+      "required": ["source_schema_version", "target_schema_version", "status"],
+      "properties": {
+        "source_schema_version": {"const": "qualityci-case-0.1"},
+        "target_schema_version": {"const": "qualityci-case-0.2"},
+        "status": {"enum": ["DETERMINISTIC_1X1", "AMBIGUOUS"]},
+        "inference_scope": {"const": "EVENT_SCOPE_ONLY"},
+        "reason": {"type": "string"},
+        "inferred_affected_links": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/affectedLink"}
+        }
+      }
+    },
+    "referenceMigration": {
+      "type": "object",
+      "required": ["source_schema_version", "target_schema_version", "status", "inference_scope", "document_ids"],
+      "properties": {
+        "source_schema_version": {"const": "qualityci-case-0.2"},
+        "target_schema_version": {"const": "qualityci-case-0.3"},
+        "status": {"const": "LEGACY_UNATTESTED"},
+        "inference_scope": {"const": "NONE"},
+        "document_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "reason": {"type": "string"}
+      }
+    },
+    "validationMigration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_schema_version", "target_schema_version", "status", "inference_scope", "evidence_ids"],
+      "properties": {
+        "source_schema_version": {"const": "qualityci-case-0.3"},
+        "target_schema_version": {"const": "qualityci-case-0.4"},
+        "status": {"const": "LEGACY_UNATTESTED"},
+        "inference_scope": {"const": "NONE"},
+        "evidence_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "reason": {"type": "string"}
+      }
+    },
+    "validationPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_version", "required_evidence"],
+      "properties": {
+        "contract_version": {"const": "qualityci-validation-plan-0.1"},
+        "required_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["evidence_id", "evidence_type", "claim", "issuer_id", "issuer_role", "valid_from", "valid_until"],
+            "properties": {
+              "evidence_id": {"type": "string", "minLength": 1},
+              "evidence_type": {"type": "string", "minLength": 1},
+              "claim": {"type": "string", "minLength": 1, "pattern": "\\S"},
+              "issuer_id": {"type": "string", "minLength": 1},
+              "issuer_role": {"type": "string", "minLength": 1},
+              "valid_from": {"type": "string", "format": "date-time", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\\.[0-9]+)?Z$"},
+              "valid_until": {"type": "string", "format": "date-time", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\\.[0-9]+)?Z$"}
+            }
+          }
+        }
+      }
+    },
+    "validationEvidence": {
+      "type": "object",
+      "required": ["evidence_id", "result", "locator"],
+      "properties": {
+        "evidence_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "result": {"enum": ["PASS", "FAIL", "PENDING"]},
+        "locator": {"type": "string"},
+        "summary": {"type": "string"}
+      }
+    },
+    "approval": {
+      "type": "object",
+      "required": ["role", "decision", "event_revision"],
+      "properties": {
+        "role": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "decision": {"enum": ["APPROVED", "REJECTED", "CHANGES_REQUESTED"]},
+        "event_revision": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+        "approved_at": {"type": "string", "format": "date"},
+        "comment": {"type": "string"}
+      }
+    },
+    "waiver": {
+      "type": "object",
+      "properties": {
+        "waiver_id": {"type": "string"},
+        "document_id": {"type": "string"},
+        "event_revision": {"type": "string"},
+        "scope": {"type": "string"},
+        "approved_roles": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "valid_from": {"type": "string", "format": "date"},
+        "valid_until": {"type": "string", "format": "date"},
+        "locator": {"type": "string"}
+      }
+    }
+  }
+}

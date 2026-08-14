@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="QualityCI 是面向制造业工程变更的合成数据工程原型，演示可重复、可审计的跨文档质量回归契约。"
+    />
+    <meta name="theme-color" content="#07182f" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="QualityCI｜工业质量回归基础设施" />
+    <meta
+      property="og:description"
+      content="面向制造业工程变更的合成数据工程原型，演示可重复、可审计的质量回归契约。"
+    />
+    <meta property="og:url" content="https://qualityci.com/" />
+    <meta property="og:image" content="https://qualityci.com/og.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="QualityCI 工业质量回归基础设施品牌卡片" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="QualityCI｜工业质量回归基础设施" />
+    <meta
+      name="twitter:description"
+      content="面向制造业工程变更的合成数据工程原型，演示可重复、可审计的质量回归契约。"
+    />
+    <meta name="twitter:image" content="https://qualityci.com/og.png" />
+    <meta name="twitter:image:alt" content="QualityCI 工业质量回归基础设施品牌卡片" />
+    <title>QualityCI｜工业质量回归基础设施</title>
+    <link rel="canonical" href="https://qualityci.com/" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+
+    <header class="site-header" data-header>
+      <a class="brand" href="#top" aria-label="QualityCI 首页">
+        <span class="brand-mark" aria-hidden="true">Q</span>
+        <span>
+          <strong>QualityCI</strong>
+          <small>INDUSTRIAL QUALITY REGRESSION</small>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+        <span class="sr-only">打开导航</span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="主导航">
+        <a href="#problem">问题</a>
+        <a href="#system">系统</a>
+        <a href="#demo">Demo</a>
+        <a href="#evidence">验证</a>
+        <a class="nav-cta" href="https://github.com/muchensu77-create/qualityci"
+          target="_blank" rel="noopener noreferrer">查看源码</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section id="top" class="hero section-shell">
+        <div class="hero-copy">
+          <p class="eyebrow">GOAI 2026 · AGENT INFRA · INDUSTRIAL AI</p>
+          <h1>把一次工程变更，<br /><span>编译成可审计的质量回归。</span></h1>
+          <p class="hero-lead">
+            QualityCI 是面向制造业工程变更与质量异常的合成数据工程原型，用于检查流程、
+            PFMEA、控制计划、SOP 与检验记录在变更后是否仍然对齐，并留下可定位、
+            可复跑、可审计的证据。
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#demo">查看演示</a>
+            <a class="button button-secondary"
+              href="https://github.com/muchensu77-create/qualityci"
+              target="_blank" rel="noopener noreferrer">查看 GitHub 源码</a>
+          </div>
+          <ul class="hero-facts" aria-label="核心能力">
+            <li><strong>3</strong><span>态判定</span></li>
+            <li><strong>4</strong><span>Agent 协同</span></li>
+            <li><strong>5</strong><span>可复用 Skill</span></li>
+            <li><strong>30</strong><span>合成变体</span></li>
+          </ul>
+        </div>
+
+        <div class="hero-console" aria-label="QualityCI 运行结果示意">
+          <div class="console-topbar">
+            <span class="console-dot"></span>
+            <span>SYNTHETIC WALKTHROUGH / M001</span>
+            <span class="console-status">EVALUATION UNBOUND</span>
+          </div>
+          <div class="console-body">
+            <p class="console-label">ENGINEERING CHANGE</p>
+            <h2>后桥螺母座面焊渣防护变更</h2>
+            <div class="console-verdict">
+              <span>RESULT</span>
+              <strong>CONTRADICTED</strong>
+            </div>
+            <div class="console-grid">
+              <div><span>Rules</span><b>7</b></div>
+              <div><span>Pass</span><b>4</b></div>
+              <div><span>Conflict</span><b>3</b></div>
+              <div><span>Unverifiable</span><b>0</b></div>
+            </div>
+            <div class="trace-line" aria-hidden="true">
+              <i></i><i></i><i></i><i></i>
+            </div>
+            <ol class="console-agents">
+              <li><span>01</span>任务协调</li>
+              <li><span>02</span>影响分析</li>
+              <li><span>03</span>证据回归</li>
+              <li><span>04</span>审批守门</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section id="problem" class="problem section-shell section-block">
+        <div class="section-heading">
+          <p class="eyebrow">THE GAP</p>
+          <h2>文件改了，不等于质量闭环也改了。</h2>
+          <p>
+            一次工艺、材料或检验变更，可能同时影响五类受控文件。人工搜索容易漏项，
+            通用聊天模型又很难证明结论来自哪个版本、哪一行和哪份证据。
+          </p>
+        </div>
+        <div class="problem-grid">
+          <article>
+            <span class="index">01</span>
+            <h3>跨文档断链</h3>
+            <p>流程、PFMEA、控制计划、SOP、检验记录分散维护，局部修改可能让旧风险复发。</p>
+          </article>
+          <article>
+            <span class="index">02</span>
+            <h3>证据无法定位</h3>
+            <p>答案没有版本、字段、位置和哈希锚点，无法进入正式评审与追溯。</p>
+          </article>
+          <article>
+            <span class="index">03</span>
+            <h3>高风险动作越权</h3>
+            <p>缺少精确批准和复跑门禁时，修订不应自动应用，更不能直接建立新基线。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="system" class="system section-block">
+        <div class="section-shell">
+          <div class="section-heading section-heading-light">
+            <p class="eyebrow">MULTI-AGENT CONTROL LOOP</p>
+            <h2>四个角色，各守一段确定性边界。</h2>
+            <p>
+              Agent 负责拆解、传递与解释；版本、身份、审批和验证结论由可执行契约控制。
+              当前 Trace 为本地确定性协同契约，AgentTeams 运行时适配处于下一阶段。
+            </p>
+          </div>
+          <div class="agent-flow">
+            <article>
+              <span>01</span>
+              <p>COORDINATE</p>
+              <h3>质量任务协调 Agent</h3>
+              <small>接收事件、约束任务范围、建立共享状态。</small>
+            </article>
+            <article>
+              <span>02</span>
+              <p>PLAN</p>
+              <h3>影响分析 Agent</h3>
+              <small>编译受影响工序、特性、文件和规则计划。</small>
+            </article>
+            <article>
+              <span>03</span>
+              <p>VERIFY</p>
+              <h3>证据回归 Agent</h3>
+              <small>运行三态规则，定位每一条证据与冲突。</small>
+            </article>
+            <article>
+              <span>04</span>
+              <p>GATE</p>
+              <h3>审批与基线 Agent</h3>
+              <small>校验精确批准；复跑未通过则不建立基线。</small>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="demo" class="demo section-shell section-block">
+        <div class="section-heading">
+          <p class="eyebrow">STATIC CONTRACT WALKTHROUGH</p>
+          <h2>不是给一个答案，而是留下整条证据链。</h2>
+          <p>
+            以下交互是依据公共入口返回字段整理的静态契约示意，不是原始运行日志或在线计算；
+            不上传文件、不调用模型、不连接产线，也不代表工艺参数获专业批准或产品自动放行。
+          </p>
+        </div>
+
+        <div class="demo-tabs" role="tablist" aria-label="演示场景">
+          <button id="tab-conflict" type="button" role="tab" aria-selected="true" aria-controls="demo-panel" tabindex="0" data-scenario="conflict">查看旧案例评估</button>
+          <button id="tab-blocked" type="button" role="tab" aria-selected="false" aria-controls="demo-panel" tabindex="-1" data-scenario="blocked">查看复跑阻断</button>
+          <button id="tab-ready" type="button" role="tab" aria-selected="false" aria-controls="demo-panel" tabindex="-1" data-scenario="ready">查看来源绑定</button>
+        </div>
+
+        <p class="replay-badge"><span></span>静态契约示意 · 非原始运行日志</p>
+
+        <div id="demo-panel" class="demo-story" data-story role="tabpanel" aria-labelledby="tab-conflict" aria-live="polite">
+          <div>
+            <span class="story-status is-conflict" data-story-status>CONTRADICTED</span>
+            <h3 data-story-title>旧版 SOP 冲突被发现，但当前路径只能评估</h3>
+            <p data-story-copy>
+              系统定位到版本不一致；由于旧 Tacoma 目录没有匹配的整体原始源根，这次运行保持
+              EVALUATION_UNBOUND，不获得可信持久化或建基线权限。
+            </p>
+            <ul data-story-points>
+              <li>模式：RUN_EVALUATION_UNBOUND</li>
+              <li>规则结果：4 PASS、3 CONTRADICTED</li>
+              <li>处理：admission BLOCKED，不写可信结果</li>
+            </ul>
+          </div>
+          <div class="story-code" aria-label="结构化结果">
+            <pre><code data-story-code>{
+  "mode": "RUN_EVALUATION_UNBOUND",
+  "trusted": false,
+  "admission": "BLOCKED",
+  "overall_status": "CONTRADICTED",
+  "rules": 7,
+  "pass": 4,
+  "contradicted": 3
+}</code></pre>
+          </div>
+        </div>
+
+      </section>
+
+      <section id="evidence" class="evidence section-block">
+        <div class="section-shell">
+          <div class="section-heading section-heading-light">
+            <p class="eyebrow">VERIFIED ENGINEERING EVIDENCE</p>
+            <h2>公共镜像的可复跑证据。</h2>
+            <p>
+              下列数字来自可随公共镜像复跑的合成工程自测，不代表真实工厂准确率、
+              质量批准、召回预防或商业效果。
+            </p>
+          </div>
+          <div class="evidence-grid">
+            <article><strong>30</strong><span>显著标注的合成变体</span></article>
+            <article><strong>210</strong><span>完整规则状态期望</span></article>
+            <article><strong>7</strong><span>确定性质量回归规则</span></article>
+            <article><strong>260</strong><span>公共镜像 macOS dev 测试通过</span></article>
+            <article><strong>4</strong><span>本地确定性 Agent 角色</span></article>
+            <article><strong>0</strong><span>客户文件或生产参数</span></article>
+          </div>
+          <div class="evidence-note">
+            <span>Public contract profile</span>
+            <code>qualityci 0.2.0.dev0 · qci-rules-0.6.0</code>
+          </div>
+        </div>
+      </section>
+
+      <section class="final-cta section-shell section-block">
+        <p class="eyebrow">OPEN ENGINEERING, EXPLICIT BOUNDARIES</p>
+        <h2>让质量变更像代码一样可回归。</h2>
+        <p>
+          QualityCI 开放 Schema、合成 Bench、Skill 契约和运行时适配层，
+          让制造业质量验证拥有可复用的工程接口。
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary"
+            href="https://github.com/muchensu77-create/qualityci"
+            target="_blank" rel="noopener noreferrer">查看 GitHub 源码</a>
+          <a class="button button-secondary" href="mailto:hello@qualityci.com">联系团队</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>QualityCI</strong>
+        <span>Industrial Quality Regression Infrastructure</span>
+      </div>
+      <p>公开事实背景 + 团队合成数据 · Apache-2.0</p>
+    </footer>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>

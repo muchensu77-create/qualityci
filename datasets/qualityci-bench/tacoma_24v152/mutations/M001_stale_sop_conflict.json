@@ -1,0 +1,18 @@
+{
+  "mutation_id": "M001_STALE_SOP_CONFLICT",
+  "description": "SOP仍引用旧版且允许1个可见颗粒，形成规格冲突与过期版本。",
+  "operations": [
+    {"op": "set", "document_id": "SOP-AXLE-SYN", "path": "revision", "value": "A"},
+    {"op": "set", "document_id": "SOP-AXLE-SYN", "path": "revision_date", "value": "2024-01-10"},
+    {"op": "set", "document_id": "SOP-AXLE-SYN", "path": "fields.characteristics", "value": [{"process_step_id": "WELD-10", "characteristic_id": "CTQ-NUT-SEAT-SPATTER", "specification": {"target": 0, "minimum": 0, "maximum": 1, "unit": "visible_particle"}, "locator": "SOP#page-4.step-7"}]}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "CONTRADICTED",
+    "QCI-R003": "PASS",
+    "QCI-R004": "CONTRADICTED",
+    "QCI-R005": "CONTRADICTED",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

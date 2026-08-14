@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/approval-subject.schema.json",
+  "title": "QualityCI ApprovalSubject",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "purpose_code", "scope_code", "purpose_text",
+    "purpose_text_hash", "resolution_id", "resolution_description_hash",
+    "operations_hash", "case_id", "event_id", "event_revision",
+    "pre_case_subject_hash", "artifact_subject_hash",
+    "controlled_reference_policy_hash", "validation_approval_policy_hash",
+    "approval_policy_version", "required_role_claims", "use_policy",
+    "execution_nonce"
+  ],
+  "properties": {
+    "contract_version": {
+      "enum": [
+        "qualityci-approval-subject-0.1",
+        "qualityci-approval-subject-0.2"
+      ]
+    },
+    "purpose_code": {"const": "APPLY_APPROVED_RESOLUTION"},
+    "scope_code": {"const": "EXACT_SUBJECT"},
+    "purpose_text": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "purpose_text_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "resolution_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "resolution_description_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "operations_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "case_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "event_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "event_revision": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "pre_case_subject_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact_subject_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "controlled_reference_policy_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "validation_approval_policy_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "approval_policy_version": {"const": "qualityci-approval-policy-0.1"},
+    "required_role_claims": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "prefixItems": [
+        {"const": "PROCESS_OWNER"},
+        {"const": "QUALITY_MANAGER"}
+      ],
+      "items": false
+    },
+    "use_policy": {"const": "SINGLE_REPLAY"},
+    "execution_nonce": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "pre_case_source": {"$ref": "#/$defs/preCaseSource"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "contract_version": {"const": "qualityci-approval-subject-0.2"}
+        },
+        "required": ["contract_version"]
+      },
+      "then": {"required": ["pre_case_source"]},
+      "else": {"not": {"required": ["pre_case_source"]}}
+    }
+  ],
+  "$defs": {
+    "preCaseSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_source_assurance_state",
+        "case_source_pack_contract_version",
+        "case_source_set_contract_version",
+        "case_source_set_hash",
+        "case_source_binding_hash",
+        "case_source_lineage_contract_version",
+        "case_source_lineage_hash"
+      ],
+      "properties": {
+        "case_source_assurance_state": {
+          "enum": [
+            "BOUND_RAW_SOURCE_CASE",
+            "SOURCE_ROOTED_DERIVATION"
+          ]
+        },
+        "case_source_pack_contract_version": {
+          "const": "qualityci-case-source-pack-0.1"
+        },
+        "case_source_set_contract_version": {
+          "const": "qualityci-case-source-set-0.1"
+        },
+        "case_source_set_hash": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "case_source_binding_hash": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "case_source_lineage_contract_version": {
+          "oneOf": [
+            {"type": "null"},
+            {"const": "qualityci-case-source-lineage-0.1"}
+          ]
+        },
+        "case_source_lineage_hash": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "string",
+              "minLength": 64,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "case_source_assurance_state": {
+                "const": "BOUND_RAW_SOURCE_CASE"
+              }
+            },
+            "required": ["case_source_assurance_state"]
+          },
+          "then": {
+            "properties": {
+              "case_source_lineage_contract_version": {"type": "null"},
+              "case_source_lineage_hash": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "case_source_lineage_contract_version": {
+                "const": "qualityci-case-source-lineage-0.1"
+              },
+              "case_source_lineage_hash": {
+                "type": "string",
+                "minLength": 64,
+                "maxLength": 64,
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

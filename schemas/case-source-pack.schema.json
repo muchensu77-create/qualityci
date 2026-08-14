@@ -1,0 +1,407 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/case-source-pack.schema.json",
+  "title": "QualityCI captured Case Builder manifest 0.4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "case", "event", "documents"],
+  "properties": {
+    "manifest_version": {"const": "qualityci-case-builder-0.4"},
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_id", "synthetic_for_competition"],
+      "properties": {
+        "case_id": {"$ref": "#/$defs/nonblank"},
+        "title": {"type": "string"},
+        "synthetic_for_competition": {"const": true},
+        "source_provenance": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "url", "use"],
+            "properties": {
+              "type": {"type": "string", "pattern": ".*\\S.*"},
+              "url": {
+                "type": "string",
+                "x-qualityci-executable-format": "qualityci-case-source-provenance-url"
+              },
+              "use": {"type": "string", "pattern": ".*\\S.*"}
+            }
+          }
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "event_type",
+        "revision",
+        "risk_level",
+        "affected_process_steps",
+        "affected_characteristics",
+        "affected_links"
+      ],
+      "properties": {
+        "event_id": {"$ref": "#/$defs/nonblank"},
+        "event_type": {
+          "$ref": "case.schema.json#/$defs/event/properties/event_type"
+        },
+        "revision": {"$ref": "#/$defs/nonblank"},
+        "approved_at": {
+          "$ref": "case.schema.json#/$defs/event/properties/approved_at"
+        },
+        "risk_level": {
+          "$ref": "case.schema.json#/$defs/event/properties/risk_level"
+        },
+        "affected_process_steps": {
+          "allOf": [
+            {"$ref": "case.schema.json#/$defs/event/properties/affected_process_steps"},
+            {"maxItems": 10000}
+          ]
+        },
+        "affected_characteristics": {
+          "allOf": [
+            {"$ref": "case.schema.json#/$defs/event/properties/affected_characteristics"},
+            {"maxItems": 10000}
+          ]
+        },
+        "affected_links": {
+          "allOf": [
+            {"$ref": "case.schema.json#/$defs/event/properties/affected_links"},
+            {"maxItems": 10000}
+          ]
+        },
+        "change_summary": {
+          "$ref": "case.schema.json#/$defs/event/properties/change_summary"
+        },
+        "validation_evidence": {
+          "allOf": [
+            {"$ref": "case.schema.json#/$defs/event/properties/validation_evidence"},
+            {"maxItems": 10000}
+          ]
+        },
+        "validation_plan": {
+          "allOf": [
+            {"$ref": "case.schema.json#/$defs/event/properties/validation_plan"},
+            {
+              "properties": {
+                "required_evidence": {"maxItems": 10000}
+              }
+            }
+          ]
+        },
+        "approvals": {
+          "allOf": [
+            {"$ref": "case.schema.json#/$defs/event/properties/approvals"},
+            {"maxItems": 10000}
+          ]
+        },
+        "provenance": {"type": "object"}
+      }
+    },
+    "documents": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/processFlow"},
+          {"$ref": "#/$defs/pfmea"},
+          {"$ref": "#/$defs/controlPlan"},
+          {"$ref": "#/$defs/sop"},
+          {"$ref": "#/$defs/inspectionRecord"}
+        ]
+      },
+      "allOf": [
+        {"contains": {"properties": {"document_type": {"const": "PROCESS_FLOW"}}, "required": ["document_type"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"document_type": {"const": "PFMEA"}}, "required": ["document_type"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"document_type": {"const": "CONTROL_PLAN"}}, "required": ["document_type"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"document_type": {"const": "SOP"}}, "required": ["document_type"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"document_type": {"const": "INSPECTION_RECORD"}}, "required": ["document_type"]}, "minContains": 1, "maxContains": 1}
+      ],
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "nonblank": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": ".*\\S.*"
+    },
+    "exactNonblank": {
+      "type": "string",
+      "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F\\u007F])\\S(?:[\\s\\S]*\\S)?$"
+    },
+    "sourcePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^(?!\\s)(?![\\s\\S]*\\s$)(?![\\s\\S]*[\\u0000-\\u001F\\u007F])(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//)(?!.*\\\\)(?!.*(?:^|/)\\.(?:/|$))(?=.+\\.(?:[Cc][Ss][Vv]|[Xx][Ll][Ss][Xx]|[Dd][Oo][Cc][Xx])$).+[^/]$"
+    },
+    "xlsxSheetSelector": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 31,
+      "pattern": "^(?=[\\s\\S]*\\S)(?!')(?![\\s\\S]*'$)(?![\\s\\S]*[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F\\[\\]:*?/\\\\])[\\s\\S]*$"
+    },
+    "baseDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "source_path",
+        "document_id",
+        "document_type",
+        "revision",
+        "status",
+        "owner",
+        "revision_date",
+        "columns"
+      ],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/exactNonblank"},
+        "source_path": {"$ref": "#/$defs/sourcePath"},
+        "document_id": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^(?![\\s\\S]*[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F])[\\s\\S]*\\S[\\s\\S]*$"},
+        "document_type": {
+          "enum": [
+            "PROCESS_FLOW",
+            "PFMEA",
+            "CONTROL_PLAN",
+            "SOP",
+            "INSPECTION_RECORD"
+          ]
+        },
+        "revision": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^(?![\\s\\S]*[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F])[\\s\\S]*\\S[\\s\\S]*$"},
+        "status": {
+          "$ref": "case.schema.json#/$defs/document/properties/status"
+        },
+        "owner": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^(?![\\s\\S]*[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F])[\\s\\S]*\\S[\\s\\S]*$"},
+        "revision_date": {"type": "string", "format": "date"},
+        "columns": {"type": "object"},
+        "header_row": {"type": "integer", "minimum": 1},
+        "table_selector": {"type": ["null", "object"]}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source_path": {"pattern": "\\.[Cc][Ss][Vv]$"}
+            },
+            "required": ["source_path"]
+          },
+          "then": {
+            "properties": {
+              "table_selector": {"type": "null"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "source_path": {"pattern": "\\.[Xx][Ll][Ss][Xx]$"}
+            },
+            "required": ["source_path"]
+          },
+          "then": {
+            "properties": {
+              "table_selector": {
+                "oneOf": [
+                  {"type": "null"},
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["sheet"],
+                    "properties": {
+                      "sheet": {"$ref": "#/$defs/xlsxSheetSelector"}
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "source_path": {"pattern": "\\.[Dd][Oo][Cc][Xx]$"}
+            },
+            "required": ["source_path"]
+          },
+          "then": {
+            "properties": {
+              "table_selector": {
+                "oneOf": [
+                  {"type": "null"},
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["table"],
+                    "properties": {
+                      "table": {"type": "integer", "minimum": 1}
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "processFlow": {
+      "allOf": [
+        {"$ref": "#/$defs/baseDocument"},
+        {
+          "properties": {
+            "document_type": {"const": "PROCESS_FLOW"},
+            "columns": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["process_step_id"],
+              "properties": {"process_step_id": {"$ref": "#/$defs/nonblank"}}
+            }
+          }
+        }
+      ]
+    },
+    "pfmea": {
+      "allOf": [
+        {"$ref": "#/$defs/baseDocument"},
+        {
+          "properties": {
+            "document_type": {"const": "PFMEA"},
+            "columns": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "process_step_id",
+                "failure_mode_id",
+                "characteristic_id",
+                "special_characteristic"
+              ],
+              "properties": {
+                "process_step_id": {"$ref": "#/$defs/nonblank"},
+                "failure_mode_id": {"$ref": "#/$defs/nonblank"},
+                "characteristic_id": {"$ref": "#/$defs/nonblank"},
+                "special_characteristic": {"$ref": "#/$defs/nonblank"},
+                "effect": {"$ref": "#/$defs/nonblank"}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "controlPlanColumns": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "process_step_id",
+        "control_id",
+        "characteristic_id",
+        "target",
+        "minimum",
+        "maximum",
+        "unit",
+        "control_method",
+        "frequency",
+        "reaction_plan"
+      ],
+      "properties": {
+        "process_step_id": {"$ref": "#/$defs/nonblank"},
+        "control_id": {"$ref": "#/$defs/nonblank"},
+        "characteristic_id": {"$ref": "#/$defs/nonblank"},
+        "target": {"$ref": "#/$defs/nonblank"},
+        "minimum": {"$ref": "#/$defs/nonblank"},
+        "maximum": {"$ref": "#/$defs/nonblank"},
+        "unit": {"$ref": "#/$defs/nonblank"},
+        "control_method": {"$ref": "#/$defs/nonblank"},
+        "frequency": {"$ref": "#/$defs/nonblank"},
+        "reaction_plan": {"$ref": "#/$defs/nonblank"}
+      }
+    },
+    "controlPlan": {
+      "allOf": [
+        {"$ref": "#/$defs/baseDocument"},
+        {
+          "properties": {
+            "document_type": {"const": "CONTROL_PLAN"},
+            "columns": {"$ref": "#/$defs/controlPlanColumns"}
+          }
+        }
+      ]
+    },
+    "characteristicColumns": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "process_step_id",
+        "characteristic_id",
+        "target",
+        "minimum",
+        "maximum",
+        "unit"
+      ],
+      "properties": {
+        "process_step_id": {"$ref": "#/$defs/nonblank"},
+        "characteristic_id": {"$ref": "#/$defs/nonblank"},
+        "target": {"$ref": "#/$defs/nonblank"},
+        "minimum": {"$ref": "#/$defs/nonblank"},
+        "maximum": {"$ref": "#/$defs/nonblank"},
+        "unit": {"$ref": "#/$defs/nonblank"}
+      }
+    },
+    "sop": {
+      "allOf": [
+        {"$ref": "#/$defs/baseDocument"},
+        {
+          "properties": {
+            "document_type": {"const": "SOP"},
+            "columns": {"$ref": "#/$defs/characteristicColumns"}
+          }
+        }
+      ]
+    },
+    "inspectionColumns": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "process_step_id",
+        "characteristic_id",
+        "target",
+        "minimum",
+        "maximum",
+        "unit",
+        "sop_document_id",
+        "sop_revision",
+        "control_plan_document_id",
+        "control_plan_revision"
+      ],
+      "properties": {
+        "process_step_id": {"$ref": "#/$defs/nonblank"},
+        "characteristic_id": {"$ref": "#/$defs/nonblank"},
+        "target": {"$ref": "#/$defs/nonblank"},
+        "minimum": {"$ref": "#/$defs/nonblank"},
+        "maximum": {"$ref": "#/$defs/nonblank"},
+        "unit": {"$ref": "#/$defs/nonblank"},
+        "sop_document_id": {"$ref": "#/$defs/nonblank"},
+        "sop_revision": {"$ref": "#/$defs/nonblank"},
+        "control_plan_document_id": {"$ref": "#/$defs/nonblank"},
+        "control_plan_revision": {"$ref": "#/$defs/nonblank"}
+      }
+    },
+    "inspectionRecord": {
+      "allOf": [
+        {"$ref": "#/$defs/baseDocument"},
+        {
+          "properties": {
+            "document_type": {"const": "INSPECTION_RECORD"},
+            "columns": {"$ref": "#/$defs/inspectionColumns"}
+          }
+        }
+      ]
+    }
+  }
+}

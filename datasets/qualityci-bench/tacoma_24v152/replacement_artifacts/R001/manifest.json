@@ -1,0 +1,38 @@
+{
+  "manifest_version": "qualityci-revision-artifact-pack-0.1",
+  "replacement_set_id": "REPLACEMENT-RES-SYN-001",
+  "case_schema_version": "qualityci-case-0.4",
+  "parser_contract_version": "qualityci-ingestion-policy-0.2",
+  "mapping_contract_version": "qualityci-explicit-mapping-0.5",
+  "security_root_policy_version": "qualityci-artifact-root-policy-0.1",
+  "documents": [
+    {
+      "source_id": "replacement-sop",
+      "source_path": "sop_b2.csv",
+      "document_id": "SOP-AXLE-SYN",
+      "document_type": "SOP",
+      "revision": "B2",
+      "status": "APPROVED",
+      "owner": "PROCESS_ENGINEERING",
+      "revision_date": "2024-02-05",
+      "columns": {"process_step_id": "process_step_id", "characteristic_id": "characteristic_id", "target": "target", "minimum": "minimum", "maximum": "maximum", "unit": "unit"},
+      "header_row": 1,
+      "table_selector": null,
+      "supersedes": {"document_id": "SOP-AXLE-SYN", "revision": "A", "source_hash": "d464245d07f6889c3dec2e5baf4e282ee111309e0ac4d3295f8baf2b20f04780"}
+    },
+    {
+      "source_id": "replacement-inspection",
+      "source_path": "inspection_b2.csv",
+      "document_id": "IR-AXLE-SYN",
+      "document_type": "INSPECTION_RECORD",
+      "revision": "B2",
+      "status": "APPROVED",
+      "owner": "QUALITY_INSPECTION",
+      "revision_date": "2024-02-06",
+      "columns": {"process_step_id": "process_step_id", "characteristic_id": "characteristic_id", "target": "target", "minimum": "minimum", "maximum": "maximum", "unit": "unit", "sop_document_id": "sop_document_id", "sop_revision": "sop_revision", "control_plan_document_id": "control_plan_document_id", "control_plan_revision": "control_plan_revision"},
+      "header_row": 1,
+      "table_selector": null,
+      "supersedes": {"document_id": "IR-AXLE-SYN", "revision": "B", "source_hash": "11ee6b77bac03dda2c06ac352aa6cc72da34063b2c5448cb31422b647fb71596"}
+    }
+  ]
+}

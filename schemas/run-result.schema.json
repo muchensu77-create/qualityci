@@ -1,0 +1,294 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/run-result.schema.json",
+  "title": "QualityCI RunResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id", "case_id", "case_hash", "ruleset_version",
+    "reference_assurance_state", "reference_set_hash",
+    "reference_contract_version", "validation_assurance_state",
+    "validation_evidence_set_hash", "validation_evidence_contract_version",
+    "overall_status", "impact_plan", "findings"
+  ],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 16, "maxLength": 16, "pattern": "^[0-9a-f]{16}$"},
+    "case_id": {"type": "string", "minLength": 1},
+    "case_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "ruleset_version": {"type": "string", "minLength": 1},
+    "run_result_contract_version": {"const": "qualityci-run-result-0.2"},
+    "run_identity_version": {"const": "qualityci-run-identity-v4"},
+    "case_source_assurance_state": {
+      "enum": [
+        "UNBOUND_SERIALIZED_CASE",
+        "BOUND_RAW_SOURCE_CASE",
+        "SOURCE_ROOTED_DERIVATION"
+      ]
+    },
+    "case_source_pack_contract_version": {
+      "type": ["string", "null"],
+      "enum": ["qualityci-case-source-pack-0.1", null]
+    },
+    "case_source_set_contract_version": {
+      "type": ["string", "null"],
+      "enum": ["qualityci-case-source-set-0.1", null]
+    },
+    "case_source_set_hash": {"$ref": "#/$defs/nullableHash"},
+    "case_source_binding_hash": {"$ref": "#/$defs/nullableHash"},
+    "case_source_lineage_contract_version": {
+      "type": ["string", "null"],
+      "enum": ["qualityci-case-source-lineage-0.1", null]
+    },
+    "case_source_lineage_hash": {"$ref": "#/$defs/nullableHash"},
+    "reference_assurance_state": {
+      "enum": ["UNATTESTED_JSON", "ATTESTED_REFERENCE_SET"]
+    },
+    "reference_set_hash": {
+      "type": ["string", "null"],
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "reference_contract_version": {
+      "type": ["string", "null"],
+      "enum": ["qualityci-controlled-reference-0.1", null]
+    },
+    "validation_assurance_state": {
+      "enum": ["UNATTESTED_VALIDATION_JSON", "ATTESTED_VALIDATION_SET"]
+    },
+    "validation_evidence_set_hash": {
+      "type": ["string", "null"],
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "validation_evidence_contract_version": {
+      "type": ["string", "null"],
+      "enum": ["qualityci-validation-evidence-0.1", null]
+    },
+    "overall_status": {
+      "enum": ["PASS", "CONTRADICTED", "UNVERIFIABLE"]
+    },
+    "impact_plan": {"$ref": "#/$defs/impactPlan"},
+    "findings": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/finding"}
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "not": {
+            "anyOf": [
+              {"required": ["run_result_contract_version"]},
+              {"required": ["run_identity_version"]},
+              {"required": ["case_source_assurance_state"]},
+              {"required": ["case_source_pack_contract_version"]},
+              {"required": ["case_source_set_contract_version"]},
+              {"required": ["case_source_set_hash"]},
+              {"required": ["case_source_binding_hash"]},
+              {"required": ["case_source_lineage_contract_version"]},
+              {"required": ["case_source_lineage_hash"]}
+            ]
+          }
+        },
+        {
+          "required": [
+            "run_result_contract_version",
+            "run_identity_version",
+            "case_source_assurance_state",
+            "case_source_pack_contract_version",
+            "case_source_set_contract_version",
+            "case_source_set_hash",
+            "case_source_binding_hash",
+            "case_source_lineage_contract_version",
+            "case_source_lineage_hash"
+          ],
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "case_source_assurance_state": {
+                    "const": "UNBOUND_SERIALIZED_CASE"
+                  }
+                },
+                "required": ["case_source_assurance_state"]
+              },
+              "then": {
+                "properties": {
+                  "case_source_pack_contract_version": {"type": "null"},
+                  "case_source_set_contract_version": {"type": "null"},
+                  "case_source_set_hash": {"type": "null"},
+                  "case_source_binding_hash": {"type": "null"},
+                  "case_source_lineage_contract_version": {"type": "null"},
+                  "case_source_lineage_hash": {"type": "null"}
+                }
+              },
+              "else": {
+                "properties": {
+                  "case_source_pack_contract_version": {
+                    "const": "qualityci-case-source-pack-0.1"
+                  },
+                  "case_source_set_contract_version": {
+                    "const": "qualityci-case-source-set-0.1"
+                  },
+                  "case_source_set_hash": {"$ref": "#/$defs/hash"},
+                  "case_source_binding_hash": {"$ref": "#/$defs/hash"}
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "case_source_assurance_state": {
+                    "const": "SOURCE_ROOTED_DERIVATION"
+                  }
+                },
+                "required": ["case_source_assurance_state"]
+              },
+              "then": {
+                "properties": {
+                  "case_source_lineage_contract_version": {
+                    "const": "qualityci-case-source-lineage-0.1"
+                  },
+                  "case_source_lineage_hash": {"$ref": "#/$defs/hash"}
+                }
+              },
+              "else": {
+                "properties": {
+                  "case_source_lineage_contract_version": {"type": "null"},
+                  "case_source_lineage_hash": {"type": "null"}
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "if": {
+        "properties": {
+          "reference_assurance_state": {"const": "UNATTESTED_JSON"}
+        },
+        "required": ["reference_assurance_state"]
+      },
+      "then": {
+        "properties": {
+          "reference_set_hash": {"type": "null"},
+          "reference_contract_version": {"type": "null"}
+        }
+      },
+      "else": {
+        "properties": {
+          "reference_set_hash": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64,
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "reference_contract_version": {
+            "const": "qualityci-controlled-reference-0.1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "validation_assurance_state": {"const": "UNATTESTED_VALIDATION_JSON"}
+        },
+        "required": ["validation_assurance_state"]
+      },
+      "then": {
+        "properties": {
+          "validation_evidence_set_hash": {"type": "null"},
+          "validation_evidence_contract_version": {"type": "null"}
+        }
+      },
+      "else": {
+        "properties": {
+          "validation_evidence_set_hash": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64,
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "validation_evidence_contract_version": {
+            "const": "qualityci-validation-evidence-0.1"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableHash": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/hash"}
+      ]
+    },
+    "impactPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id", "affected_process_steps", "affected_characteristics",
+        "affected_links", "required_document_types", "selected_rule_ids",
+        "reasoning_path"
+      ],
+      "properties": {
+        "event_id": {"type": "string"},
+        "affected_process_steps": {"type": "array", "items": {"type": "string"}},
+        "affected_characteristics": {"type": "array", "items": {"type": "string"}},
+        "affected_links": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [{"type": "string"}, {"type": "string"}],
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "required_document_types": {"type": "array", "items": {"type": "string"}},
+        "selected_rule_ids": {"type": "array", "items": {"type": "string"}},
+        "reasoning_path": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id", "title", "status", "severity", "summary", "evidence",
+        "remediation", "acceptance_conditions"
+      ],
+      "properties": {
+        "rule_id": {"type": "string"},
+        "title": {"type": "string"},
+        "status": {"enum": ["PASS", "CONTRADICTED", "UNVERIFIABLE"]},
+        "severity": {"type": "string"},
+        "summary": {"type": "string"},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}},
+        "remediation": {"type": "string"},
+        "acceptance_conditions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["document_id", "revision", "locator", "excerpt", "source_hash"],
+      "properties": {
+        "document_id": {"type": "string"},
+        "revision": {"type": "string"},
+        "locator": {"type": "string"},
+        "excerpt": {"type": "string"},
+        "source_hash": {"type": "string"}
+      }
+    }
+  }
+}

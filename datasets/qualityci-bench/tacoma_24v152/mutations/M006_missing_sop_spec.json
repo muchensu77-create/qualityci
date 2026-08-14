@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M006_MISSING_SOP_SPEC",
+  "description": "SOP存在该特性但缺少可比较规格。",
+  "operations": [
+    {"op": "set", "document_id": "SOP-AXLE-SYN", "path": "fields.characteristics", "value": []}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "UNVERIFIABLE",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

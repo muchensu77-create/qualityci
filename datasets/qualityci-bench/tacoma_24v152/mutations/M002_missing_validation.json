@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M002_MISSING_VALIDATION",
+  "description": "删除工程变更有效性验证证据。",
+  "operations": [
+    {"op": "delete", "target": "event", "path": "validation_evidence"}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "UNVERIFIABLE",
+    "QCI-R007": "PASS"
+  }
+}

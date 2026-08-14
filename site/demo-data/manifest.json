@@ -1,0 +1,18 @@
+{
+  "contract_version": "qualityci-static-walkthrough-0.1",
+  "runtime_mode": "STATIC_CONTRACT_WALKTHROUGH",
+  "synthetic": true,
+  "source_profile": "PUBLIC_ENTRY_FIELD_SUMMARY",
+  "raw_runtime_log": false,
+  "ruleset_version": "qci-rules-0.6.0",
+  "scenarios": {
+    "conflict": "m001-conflict.json",
+    "blocked": "m001-blocked.json",
+    "ready": "source-bound-ready.json"
+  },
+  "scenario_sha256": {
+    "conflict": "9496d57f771dc6012e56377ac21f5d114a08018994cd8700c1ba44f4b72b11b0",
+    "blocked": "3e00095ae007d4fa3e56a737063aa15da4bdb33b0994c07248e8e06f299524a9",
+    "ready": "4cfc36da9e15f2bc25e6dd9891ff7007bf7a73da0df72dcd56f86393cfcdd02d"
+  }
+}

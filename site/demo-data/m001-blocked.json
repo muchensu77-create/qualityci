@@ -1,0 +1,19 @@
+{
+  "scenario_id": "blocked",
+  "synthetic": true,
+  "status": "REPLAY BLOCKED",
+  "status_class": "is-blocked",
+  "title": "旧批准材料不能替代 A08 原始源根",
+  "copy": "即使旧目录包含双角色合成批准，服务端仍返回 A08_SOURCE_PACK_REQUIRED；旧批准数量不能把 unbound Case 升级为可信复跑。",
+  "points": [
+    "请求：M001 + RES-SYN-001 + source run id",
+    "批准模式：SOURCE_ROOTED_RAW_MATERIAL_REQUIRED",
+    "处理：HTTP 409，响应中没有 replay 或 baseline"
+  ],
+  "result": {
+    "http_status": 409,
+    "status": "BLOCKED",
+    "approval_mode": "SOURCE_ROOTED_RAW_MATERIAL_REQUIRED",
+    "error": "A08_SOURCE_PACK_REQUIRED"
+  }
+}

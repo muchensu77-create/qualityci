@@ -1,0 +1,64 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name qualityci.com www.qualityci.com;
+    return 301 https://qualityci.com$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name www.qualityci.com;
+
+    ssl_certificate /etc/letsencrypt/live/qualityci.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/qualityci.com/privkey.pem;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    return 301 https://qualityci.com$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name qualityci.com;
+
+    root /var/www/qualityci/site;
+    index index.html;
+    charset utf-8;
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    ssl_certificate /etc/letsencrypt/live/qualityci.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/qualityci.com/privkey.pem;
+
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()" always;
+    add_header Cross-Origin-Opener-Policy "same-origin" always;
+    add_header Cross-Origin-Resource-Policy "same-origin" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+
+    location = /api {
+        return 404;
+    }
+
+    location ^~ /api/ {
+        return 404;
+    }
+
+    location = /index.html {
+        expires -1;
+        try_files $uri =404;
+    }
+
+    location / {
+        limit_except GET HEAD { deny all; }
+        try_files $uri $uri/ =404;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+}

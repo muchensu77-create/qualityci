@@ -1,0 +1,17 @@
+{
+  "mutation_id": "M018_APPROVED_WAIVER_BOUNDARY",
+  "description": "过程流程图修订日期早于变更批准，但存在绑定文件、事件版本、角色、有效期和位置的结构化豁免；规则不应误报。",
+  "operations": [
+    {"op": "set", "document_id": "PF-AXLE-SYN", "path": "revision_date", "value": "2024-01-15"},
+    {"op": "set", "document_id": "PF-AXLE-SYN", "path": "approved_waiver", "value": {"waiver_id": "WVR-SYN-001", "document_id": "PF-AXLE-SYN", "event_revision": "2", "scope": "REVISION_DATE_EXCEPTION", "approved_roles": ["QUALITY_MANAGER", "PROCESS_OWNER"], "valid_from": "2024-01-15", "valid_until": "2024-02-15", "locator": "WaiverRegister#WVR-SYN-001"}}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

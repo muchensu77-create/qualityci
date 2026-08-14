@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M023_FAILED_VALIDATION_RESULT",
+  "description": "工程变更验证证据可定位，但验证结果明确为FAIL。",
+  "operations": [
+    {"op": "set", "target": "event", "path": "validation_evidence", "value": [{"evidence_id": "VAL-SYN-001", "result": "FAIL", "locator": "synthetic-validation-report#section-4", "summary": "合成验证批次仍发现座面焊渣"}]}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "CONTRADICTED",
+    "QCI-R007": "PASS"
+  }
+}

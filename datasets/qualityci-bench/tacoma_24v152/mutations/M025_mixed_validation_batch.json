@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M025_MIXED_VALIDATION_BATCH",
+  "description": "一条验证通过、另一条验证失败；部分通过不能掩盖失败证据。",
+  "operations": [
+    {"op": "set", "target": "event", "path": "validation_evidence", "value": [{"evidence_id": "VAL-SYN-001", "result": "PASS", "locator": "synthetic-validation-report#section-4", "summary": "目视检验流程验证通过"}, {"evidence_id": "VAL-SYN-002", "result": "FAIL", "locator": "synthetic-validation-report#section-5", "summary": "复核样本仍发现残留焊渣"}]}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "CONTRADICTED",
+    "QCI-R007": "PASS"
+  }
+}

@@ -1,0 +1,400 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/replay-admission.schema.json",
+  "title": "QualityCI Replay Admission",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "replay_admission_hash", "contract_version", "resolution_id",
+    "resolution_hash", "assurance_state", "artifact_set_hash",
+    "controlled_reference_set_hash",
+    "controlled_reference_source_set_hash",
+    "source_validation_evidence_set_hash",
+    "resolved_validation_evidence_set_hash",
+    "validation_evidence_pair_hash", "validation_evidence_contract_version",
+    "pre_case", "before_case", "before_run", "after_case", "after_run",
+    "approval_subject", "approval_subject_hash", "approved_patch_hash",
+    "approval_refs", "baseline", "ruleset_versions",
+    "artifact_contract_version", "reference_contract_version",
+    "validation_contract_version", "case_schema_version",
+    "parser_contract_version", "mapping_contract_version",
+    "security_root_policy_version"
+  ],
+  "properties": {
+    "replay_admission_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "contract_version": {"enum": ["qualityci-replay-admission-0.2", "qualityci-replay-admission-0.3", "qualityci-replay-admission-0.4", "qualityci-replay-admission-0.5"]},
+    "resolution_id": {"type": "string", "minLength": 1},
+    "resolution_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "assurance_state": {"const": "ATTESTED_REPLACEMENT"},
+    "artifact_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "controlled_reference_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "controlled_reference_source_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_validation_evidence_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "resolved_validation_evidence_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "validation_evidence_pair_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "validation_evidence_contract_version": {"const": "qualityci-validation-evidence-0.1"},
+    "pre_case": {"$ref": "#/$defs/caseIdentity"},
+    "before_case": {"$ref": "#/$defs/caseIdentity"},
+    "before_case_source": {"$ref": "#/$defs/caseSourceIdentity"},
+    "before_run": {"$ref": "#/$defs/runIdentity"},
+    "after_case": {"$ref": "#/$defs/caseIdentity"},
+    "after_run": {"$ref": "#/$defs/runIdentity"},
+    "after_case_source": {"$ref": "#/$defs/derivedCaseSourceIdentity"},
+    "approval_subject": {},
+    "approval_subject_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "approved_patch_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "approval_refs": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/approvalRef"},
+          {"$ref": "#/$defs/nativeApprovalRef"}
+        ]
+      }
+    },
+    "authorization_record_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "authorization_record_set_contract_version": {"const": "qualityci-authorization-record-set-0.2"},
+    "approval_assertion_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "authorization_authenticity_state": {"const": "PASS"},
+    "authorization_authenticity_context_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_authenticity_binding_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_trust_snapshot_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_trust_snapshot_contract_version": {"const": "qualityci-authorization-trust-snapshot-0.1"},
+    "authorization_trust_policy_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_trust_policy_version": {"const": "qualityci-authorization-trust-policy-0.1"},
+    "execution_nonce": {"type": "string", "minLength": 1},
+    "use_policy": {"const": "SINGLE_REPLAY"},
+    "baseline": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["baseline_id", "baseline_hash"],
+          "properties": {
+            "baseline_id": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+            "baseline_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          }
+        }
+      ]
+    },
+    "ruleset_versions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["before", "after"],
+      "properties": {
+        "before": {"type": "string", "minLength": 1},
+        "after": {"type": "string", "minLength": 1}
+      }
+    },
+    "artifact_contract_version": {"const": "qualityci-revision-artifact-0.3"},
+    "reference_contract_version": {"const": "qualityci-controlled-reference-0.1"},
+    "validation_contract_version": {"const": "qualityci-validation-evidence-0.1"},
+    "case_schema_version": {"const": "qualityci-case-0.4"},
+    "parser_contract_version": {"const": "qualityci-ingestion-policy-0.2"},
+    "mapping_contract_version": {"const": "qualityci-explicit-mapping-0.5"},
+    "security_root_policy_version": {"const": "qualityci-artifact-root-policy-0.1"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"contract_version": {"enum": ["qualityci-replay-admission-0.3", "qualityci-replay-admission-0.4", "qualityci-replay-admission-0.5"]}},
+        "required": ["contract_version"]
+      },
+      "then": {
+        "required": [
+          "authorization_record_set_hash", "approval_assertion_set_hash",
+          "execution_nonce", "use_policy"
+        ],
+        "properties": {
+          "approval_refs": {
+            "items": {"$ref": "#/$defs/nativeApprovalRef"}
+          }
+        }
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {"required": ["authorization_record_set_hash"]},
+            {"required": ["approval_assertion_set_hash"]},
+            {"required": ["execution_nonce"]},
+            {"required": ["use_policy"]}
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"contract_version": {"enum": ["qualityci-replay-admission-0.4", "qualityci-replay-admission-0.5"]}},
+        "required": ["contract_version"]
+      },
+      "then": {
+        "required": [
+          "authorization_record_set_contract_version",
+          "authorization_authenticity_state",
+          "authorization_authenticity_context_hash",
+          "authorization_authenticity_binding_hash",
+          "authorization_trust_snapshot_hash",
+          "authorization_trust_snapshot_contract_version",
+          "authorization_trust_policy_hash",
+          "authorization_trust_policy_version"
+        ]
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {"required": ["authorization_record_set_contract_version"]},
+            {"required": ["authorization_authenticity_state"]},
+            {"required": ["authorization_authenticity_context_hash"]},
+            {"required": ["authorization_authenticity_binding_hash"]},
+            {"required": ["authorization_trust_snapshot_hash"]},
+            {"required": ["authorization_trust_snapshot_contract_version"]},
+            {"required": ["authorization_trust_policy_hash"]},
+            {"required": ["authorization_trust_policy_version"]}
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"contract_version": {"const": "qualityci-replay-admission-0.5"}},
+        "required": ["contract_version"]
+      },
+      "then": {
+        "required": ["before_case_source", "after_case_source"],
+        "properties": {
+          "approval_subject": {"$ref": "#/$defs/approvalSubjectV02"}
+        }
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {"required": ["before_case_source"]},
+            {"required": ["after_case_source"]}
+          ]
+        },
+        "if": {
+          "properties": {
+            "contract_version": {
+              "enum": [
+                "qualityci-replay-admission-0.3",
+                "qualityci-replay-admission-0.4"
+              ]
+            }
+          },
+          "required": ["contract_version"]
+        },
+        "then": {
+          "properties": {
+            "approval_subject": {"$ref": "#/$defs/approvalSubjectV01"}
+          }
+        },
+        "else": {
+          "properties": {
+            "approval_subject": {
+              "oneOf": [
+                {"$ref": "#/$defs/legacyApprovalSubject"},
+                {"$ref": "#/$defs/approvalSubjectV01"}
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "legacyApprovalSubject": {
+      "type": "object",
+      "required": ["validation_policy"],
+      "properties": {
+        "validation_policy": {"$ref": "validation-approval-policy.schema.json"}
+      }
+    },
+    "approvalSubjectV01": {
+      "allOf": [
+        {"$ref": "approval-subject.schema.json"},
+        {
+          "type": "object",
+          "required": ["contract_version"],
+          "properties": {
+            "contract_version": {"const": "qualityci-approval-subject-0.1"}
+          }
+        }
+      ]
+    },
+    "approvalSubjectV02": {
+      "allOf": [
+        {"$ref": "approval-subject.schema.json"},
+        {
+          "type": "object",
+          "required": ["contract_version"],
+          "properties": {
+            "contract_version": {"const": "qualityci-approval-subject-0.2"}
+          }
+        }
+      ]
+    },
+    "caseSourceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_source_assurance_state",
+        "case_source_pack_contract_version",
+        "case_source_set_contract_version",
+        "case_source_set_hash",
+        "case_source_binding_hash",
+        "case_source_lineage_contract_version",
+        "case_source_lineage_hash"
+      ],
+      "properties": {
+        "case_source_assurance_state": {
+          "enum": [
+            "BOUND_RAW_SOURCE_CASE",
+            "SOURCE_ROOTED_DERIVATION"
+          ]
+        },
+        "case_source_pack_contract_version": {
+          "const": "qualityci-case-source-pack-0.1"
+        },
+        "case_source_set_contract_version": {
+          "const": "qualityci-case-source-set-0.1"
+        },
+        "case_source_set_hash": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "case_source_binding_hash": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "case_source_lineage_contract_version": {
+          "oneOf": [
+            {"type": "null"},
+            {"const": "qualityci-case-source-lineage-0.1"}
+          ]
+        },
+        "case_source_lineage_hash": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "string",
+              "minLength": 64,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "case_source_assurance_state": {
+                "const": "BOUND_RAW_SOURCE_CASE"
+              }
+            },
+            "required": ["case_source_assurance_state"]
+          },
+          "then": {
+            "properties": {
+              "case_source_lineage_contract_version": {"type": "null"},
+              "case_source_lineage_hash": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "case_source_lineage_contract_version": {
+                "const": "qualityci-case-source-lineage-0.1"
+              },
+              "case_source_lineage_hash": {
+                "type": "string",
+                "minLength": 64,
+                "maxLength": 64,
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "derivedCaseSourceIdentity": {
+      "allOf": [
+        {"$ref": "#/$defs/caseSourceIdentity"},
+        {
+          "type": "object",
+          "properties": {
+            "case_source_assurance_state": {
+              "const": "SOURCE_ROOTED_DERIVATION"
+            }
+          }
+        }
+      ]
+    },
+    "caseIdentity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["case_id", "case_hash"],
+      "properties": {
+        "case_id": {"type": "string", "minLength": 1},
+        "case_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "runIdentity": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "run_id", "case_id", "case_hash", "status",
+        "reference_assurance_state", "reference_set_hash",
+        "reference_contract_version", "validation_assurance_state",
+        "validation_evidence_set_hash", "validation_evidence_contract_version",
+        "run_hash"
+      ],
+      "properties": {
+        "run_id": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+        "case_id": {"type": "string", "minLength": 1},
+        "case_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "status": {"enum": ["PASS", "CONTRADICTED", "UNVERIFIABLE"]},
+        "reference_assurance_state": {"const": "ATTESTED_REFERENCE_SET"},
+        "reference_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "reference_contract_version": {"const": "qualityci-controlled-reference-0.1"},
+        "validation_assurance_state": {"const": "ATTESTED_VALIDATION_SET"},
+        "validation_evidence_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "validation_evidence_contract_version": {"const": "qualityci-validation-evidence-0.1"},
+        "run_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "approvalRef": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "resolution_id", "case_id", "event_id", "event_revision",
+        "approved_case_hash", "approved_patch_hash", "role", "decision",
+        "payload_hash"
+      ],
+      "properties": {
+        "resolution_id": {"type": "string", "minLength": 1},
+        "case_id": {"type": "string", "minLength": 1},
+        "event_id": {"type": "string", "minLength": 1},
+        "event_revision": {"type": "string", "minLength": 1},
+        "approved_case_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "approved_patch_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "role": {"enum": ["QUALITY_MANAGER", "PROCESS_OWNER"]},
+        "decision": {"const": "APPROVED"},
+        "payload_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "nativeApprovalRef": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "assertion_hash", "approval_id", "role_claim",
+        "authorization_record_id", "authorization_record_hash"
+      ],
+      "properties": {
+        "assertion_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "approval_id": {"type": "string", "minLength": 1},
+        "role_claim": {"enum": ["QUALITY_MANAGER", "PROCESS_OWNER"]},
+        "authorization_record_id": {"type": "string", "minLength": 1},
+        "authorization_record_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

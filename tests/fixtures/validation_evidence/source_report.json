@@ -1,0 +1,18 @@
+{
+  "case_schema_version": "qualityci-case-0.4",
+  "case_subject_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "claim": "WELD_AND_INSPECTION_CHANGE_EFFECTIVE",
+  "event_id": "ECO-SYN-001",
+  "event_revision": "2",
+  "evidence_id": "VAL-SYN-001",
+  "evidence_type": "PROCESS_CHANGE_VALIDATION",
+  "issued_at": "2024-02-01T12:30:00Z",
+  "issuer_id": "SYNTHETIC-LAB",
+  "issuer_role": "VALIDATION_OWNER",
+  "locator": "source_report.json#/result",
+  "performed_at": "2024-02-01T12:00:00Z",
+  "result": "PASS",
+  "ruleset_version": "qci-rules-0.6.0",
+  "scope_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+  "summary": "Synthetic validation claim fixture; hashes are replaced after the A04 subject contract is implemented."
+}

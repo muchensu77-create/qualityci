@@ -1,0 +1,152 @@
+{
+  "schema_version": "qualityci-case-0.3",
+  "case_id": "QCI-SYN-ELECTRONICS-NCR-001",
+  "title": "连接器扭矩异常与纠正措施验证（完全合成）",
+  "synthetic_for_competition": true,
+  "source_provenance": [
+    {
+      "type": "FULLY_SYNTHETIC",
+      "url": "https://qualityci.local/synthetic/electronics-ncr-001",
+      "use": "验证QUALITY_EVENT类型和跨文件回归，不代表任何真实企业"
+    }
+  ],
+  "event": {
+    "event_id": "NCR-SYN-001",
+    "event_type": "QUALITY_EVENT",
+    "revision": "1",
+    "approved_at": "2026-07-01",
+    "risk_level": "HIGH",
+    "affected_process_steps": ["ASSEMBLE-20", "INSPECT-30"],
+    "affected_characteristics": ["CTQ-CONNECTOR-TORQUE"],
+    "affected_links": [
+      {"process_step_id": "ASSEMBLE-20", "characteristic_id": "CTQ-CONNECTOR-TORQUE"}
+    ],
+    "change_summary": "针对连接器扭矩异常更新控制、作业与检验要求（完全合成）",
+    "validation_evidence": [
+      {
+        "evidence_id": "CAPA-VAL-SYN-001",
+        "result": "PASS",
+        "locator": "synthetic-capa-report#effectiveness-2",
+        "summary": "合成验证批次满足扭矩窗口且无复发"
+      }
+    ],
+    "approvals": [
+      {"role": "QUALITY_MANAGER", "decision": "APPROVED", "event_revision": "1", "approved_at": "2026-07-01"},
+      {"role": "PROCESS_OWNER", "decision": "APPROVED", "event_revision": "1", "approved_at": "2026-07-01"}
+    ]
+  },
+  "documents": [
+    {
+      "document_id": "PF-ELEC-SYN",
+      "document_type": "PROCESS_FLOW",
+      "revision": "C",
+      "status": "APPROVED",
+      "owner": "PROCESS_ENGINEERING",
+      "revision_date": "2026-07-02",
+      "source_hash": "synthetic-elec-pf-c",
+      "fields": {"process_steps": ["PREP-10", "ASSEMBLE-20", "INSPECT-30"]}
+    },
+    {
+      "document_id": "PFMEA-ELEC-SYN",
+      "document_type": "PFMEA",
+      "revision": "C",
+      "status": "APPROVED",
+      "owner": "QUALITY_ENGINEERING",
+      "revision_date": "2026-07-02",
+      "source_hash": "synthetic-elec-pfmea-c",
+      "fields": {
+        "process_steps": ["PREP-10", "ASSEMBLE-20", "INSPECT-30"],
+        "risks": [
+          {
+            "failure_mode_id": "FM-CONNECTOR-TORQUE-LOW",
+            "process_step_id": "ASSEMBLE-20",
+            "characteristic_id": "CTQ-CONNECTOR-TORQUE",
+            "special_characteristic": true,
+            "effect": "连接可靠性降低",
+            "locator": "PFMEA!row-22"
+          }
+        ]
+      }
+    },
+    {
+      "document_id": "CP-ELEC-SYN",
+      "document_type": "CONTROL_PLAN",
+      "revision": "C",
+      "status": "APPROVED",
+      "owner": "QUALITY_ENGINEERING",
+      "revision_date": "2026-07-03",
+      "source_hash": "dc12751b3f25c0f4ab4572bd6fb323a6ade92f55353d4731d4fa8fe7815005ce",
+      "fields": {
+        "process_steps": ["PREP-10", "ASSEMBLE-20", "INSPECT-30"],
+        "characteristics": [
+          {
+            "control_id": "CTRL-CONNECTOR-TORQUE",
+            "process_step_id": "ASSEMBLE-20",
+            "characteristic_id": "CTQ-CONNECTOR-TORQUE",
+            "specification": {"target": 0.8, "minimum": 0.75, "maximum": 0.85, "unit": "N_m"},
+            "control_method": "数字扭矩工具记录",
+            "frequency": "每件",
+            "reaction_plan": "隔离、复紧、复检并升级异常批次",
+            "locator": "ControlPlan!F18:K18"
+          }
+        ]
+      }
+    },
+    {
+      "document_id": "SOP-ELEC-SYN",
+      "document_type": "SOP",
+      "revision": "C",
+      "status": "APPROVED",
+      "owner": "PROCESS_ENGINEERING",
+      "revision_date": "2026-07-03",
+      "source_hash": "3631f886e65c1cb48f241831fe1468b7ad152f17716d9698abd4412747d1f0f2",
+      "fields": {
+        "process_steps": ["ASSEMBLE-20"],
+        "characteristics": [
+          {
+            "process_step_id": "ASSEMBLE-20",
+            "characteristic_id": "CTQ-CONNECTOR-TORQUE",
+            "specification": {"target": 0.8, "minimum": 0.75, "maximum": 0.85, "unit": "N_m"},
+            "locator": "SOP#section-5.step-3"
+          }
+        ]
+      }
+    },
+    {
+      "document_id": "IR-ELEC-SYN",
+      "document_type": "INSPECTION_RECORD",
+      "revision": "C",
+      "status": "APPROVED",
+      "owner": "QUALITY_INSPECTION",
+      "revision_date": "2026-07-04",
+      "source_hash": "c226491f7b41700068b391b98e4dea192f8699b7fdb1cb13af243d51859484d3",
+      "reference_contract_version": "qualityci-controlled-reference-0.1",
+      "fields": {
+        "process_steps": ["ASSEMBLE-20"],
+        "references": {
+          "SOP": {
+            "document_type": "SOP",
+            "document_id": "SOP-ELEC-SYN",
+            "revision": "C",
+            "source_hash": "3631f886e65c1cb48f241831fe1468b7ad152f17716d9698abd4412747d1f0f2"
+          },
+          "CONTROL_PLAN": {
+            "document_type": "CONTROL_PLAN",
+            "document_id": "CP-ELEC-SYN",
+            "revision": "C",
+            "source_hash": "dc12751b3f25c0f4ab4572bd6fb323a6ade92f55353d4731d4fa8fe7815005ce"
+          }
+        },
+        "characteristics": [
+          {
+            "process_step_id": "ASSEMBLE-20",
+            "characteristic_id": "CTQ-CONNECTOR-TORQUE",
+            "specification": {"target": 0.8, "minimum": 0.75, "maximum": 0.85, "unit": "N_m"},
+            "locator": "InspectionRecord!J12:N12"
+          }
+        ]
+      }
+    }
+  ],
+  "reference_contract_version": "qualityci-controlled-reference-0.1"
+}

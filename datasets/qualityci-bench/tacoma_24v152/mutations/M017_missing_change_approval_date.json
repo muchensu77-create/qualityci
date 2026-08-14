@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M017_MISSING_CHANGE_APPROVAL_DATE",
+  "description": "工程变更缺少批准日期，无法判断APPROVED文件的修订日期时序。",
+  "operations": [
+    {"op": "delete", "target": "event", "path": "approved_at"}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "UNVERIFIABLE",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

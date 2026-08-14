@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M022_INSPECTION_REFERENCE_EXTRA_DOCUMENT",
+  "description": "检验记录的受控引用包含未经规则预期的旧版作业卡字段，引用集合不等于当前基线。",
+  "operations": [
+    {"op": "set", "document_id": "IR-AXLE-SYN", "path": "fields.references.WORK_CARD", "value": {"document_type": "WORK_CARD", "document_id": "WC-LEGACY-SYN", "revision": "A", "source_hash": "1111111111111111111111111111111111111111111111111111111111111111"}}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "CONTRADICTED",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

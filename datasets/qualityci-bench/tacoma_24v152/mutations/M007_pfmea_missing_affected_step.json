@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M007_PFMEA_MISSING_AFFECTED_STEP",
+  "description": "PFMEA仍列出WELD-10，但受影响风险行错误绑定到CLEAN-20。",
+  "operations": [
+    {"op": "set", "document_id": "PFMEA-AXLE-SYN", "path": "fields.risks", "value": [{"failure_mode_id": "FM-SPATTER-SEAT", "process_step_id": "CLEAN-20", "characteristic_id": "CTQ-NUT-SEAT-SPATTER", "special_characteristic": true, "effect": "螺母座面夹紧保持能力降低", "locator": "PFMEA!row-18"}]}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "CONTRADICTED",
+    "QCI-R002": "PASS",
+    "QCI-R003": "CONTRADICTED",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

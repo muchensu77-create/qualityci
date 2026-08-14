@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/authorization-authenticity-decision.schema.json",
+  "title": "QualityCI Authorization Authenticity Decision 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "x-outputOnly": true,
+  "x-derivedIdentity": "authorization_authenticity_context_hash",
+  "required": [
+    "contract_version", "state", "reason_code",
+    "authorization_record_set_hash", "authorization_record_set_contract_version",
+    "trust_snapshot_hash", "trust_snapshot_contract_version",
+    "trust_policy_hash", "trust_policy_version",
+    "authorization_authenticity_context_hash"
+  ],
+  "properties": {
+    "contract_version": {"const": "qualityci-authorization-authenticity-context-0.1"},
+    "state": {"enum": ["PASS", "CONTRADICTED", "UNVERIFIABLE"]},
+    "reason_code": {"type": "string", "minLength": 1, "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F])\\S(?:[\\s\\S]*\\S)?$"},
+    "authorization_record_set_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_record_set_contract_version": {"enum": ["qualityci-authorization-record-set-0.1", "qualityci-authorization-record-set-0.2"]},
+    "trust_snapshot_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "trust_snapshot_contract_version": {"const": "qualityci-authorization-trust-snapshot-0.1"},
+    "trust_policy_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "trust_policy_version": {"const": "qualityci-authorization-trust-policy-0.1"},
+    "authorization_authenticity_context_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"}
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "state": {"const": "PASS"},
+        "reason_code": {"const": "PASS"},
+        "authorization_record_set_contract_version": {"const": "qualityci-authorization-record-set-0.2"}
+      }
+    },
+    {
+      "properties": {
+        "state": {"const": "CONTRADICTED"},
+        "reason_code": {
+          "enum": [
+            "TRUST_SNAPSHOT_POLICY_MISMATCH",
+            "TRUST_SNAPSHOT_SEQUENCE_MISMATCH",
+            "TRUST_SNAPSHOT_SIGNATURE_INVALID",
+            "TRUST_SNAPSHOT_ISSUER_IDENTITY_CONFLICT",
+            "AUTHORIZATION_ROLE_SET_MISMATCH",
+            "AUTHORIZATION_RECORD_TRUST_JOIN_MISMATCH",
+            "AUTHORIZATION_ISSUER_KEY_REVOKED",
+            "AUTHORIZATION_ISSUER_CAPABILITY_MISMATCH",
+            "AUTHORIZATION_STATIC_WINDOW_MISMATCH",
+            "AUTHORIZATION_RECORD_SIGNATURE_INVALID"
+          ]
+        },
+        "authorization_record_set_contract_version": {"const": "qualityci-authorization-record-set-0.2"}
+      }
+    },
+    {
+      "properties": {
+        "state": {"const": "UNVERIFIABLE"},
+        "reason_code": {"const": "LEGACY_UNSIGNED_AUTHORIZATION"},
+        "authorization_record_set_contract_version": {"const": "qualityci-authorization-record-set-0.1"}
+      }
+    },
+    {
+      "properties": {
+        "state": {"const": "UNVERIFIABLE"},
+        "reason_code": {
+          "enum": [
+            "AUTHORIZATION_ISSUER_KEY_NOT_FOUND",
+            "AUTHORIZATION_ISSUER_KEY_STATUS_UNKNOWN"
+          ]
+        },
+        "authorization_record_set_contract_version": {"const": "qualityci-authorization-record-set-0.2"}
+      }
+    }
+  ]
+}

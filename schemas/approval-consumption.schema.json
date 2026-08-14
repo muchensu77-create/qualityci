@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/approval-consumption.schema.json",
+  "title": "QualityCI Approval Consumption",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "approval_subject_hash", "assertion_set_hash",
+    "authorization_record_set_hash", "execution_nonce", "use_policy",
+    "replay_admission_hash", "after_case_hash", "after_run_id"
+  ],
+  "properties": {
+    "contract_version": {"enum": ["qualityci-approval-consumption-0.1", "qualityci-approval-consumption-0.2"]},
+    "approval_subject_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "assertion_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "authorization_record_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "authorization_record_set_contract_version": {"const": "qualityci-authorization-record-set-0.2"},
+    "authorization_authenticity_state": {"const": "PASS"},
+    "authorization_authenticity_context_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_authenticity_binding_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_trust_snapshot_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_trust_snapshot_contract_version": {"const": "qualityci-authorization-trust-snapshot-0.1"},
+    "authorization_trust_policy_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_trust_policy_version": {"const": "qualityci-authorization-trust-policy-0.1"},
+    "replay_authorization_authenticity_binding_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "execution_nonce": {"type": "string", "minLength": 1},
+    "use_policy": {"const": "SINGLE_REPLAY"},
+    "replay_admission_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "after_case_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "after_run_id": {"type": "string", "pattern": "^[0-9a-f]{16}$"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"contract_version": {"const": "qualityci-approval-consumption-0.2"}},
+        "required": ["contract_version"]
+      },
+      "then": {
+        "required": [
+          "authorization_record_set_contract_version",
+          "authorization_authenticity_state",
+          "authorization_authenticity_context_hash",
+          "authorization_authenticity_binding_hash",
+          "authorization_trust_snapshot_hash",
+          "authorization_trust_snapshot_contract_version",
+          "authorization_trust_policy_hash",
+          "authorization_trust_policy_version",
+          "replay_authorization_authenticity_binding_hash"
+        ]
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {"required": ["authorization_record_set_contract_version"]},
+            {"required": ["authorization_authenticity_state"]},
+            {"required": ["authorization_authenticity_context_hash"]},
+            {"required": ["authorization_authenticity_binding_hash"]},
+            {"required": ["authorization_trust_snapshot_hash"]},
+            {"required": ["authorization_trust_snapshot_contract_version"]},
+            {"required": ["authorization_trust_policy_hash"]},
+            {"required": ["authorization_trust_policy_version"]},
+            {"required": ["replay_authorization_authenticity_binding_hash"]}
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M016_NON_SPECIAL_CHARACTERISTIC_BOUNDARY",
+  "description": "PFMEA将该特性标为非特殊特性；高风险特殊特性控制规则不应误报。",
+  "operations": [
+    {"op": "set", "document_id": "PFMEA-AXLE-SYN", "path": "fields.risks", "value": [{"failure_mode_id": "FM-SPATTER-SEAT", "process_step_id": "WELD-10", "characteristic_id": "CTQ-NUT-SEAT-SPATTER", "special_characteristic": false, "effect": "螺母座面夹紧保持能力降低", "locator": "PFMEA!row-18"}]}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

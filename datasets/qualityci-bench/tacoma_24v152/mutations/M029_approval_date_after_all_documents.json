@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M029_APPROVAL_DATE_AFTER_ALL_DOCUMENTS",
+  "description": "工程变更批准日推迟到所有文件修订日之后，所有受控文件均成为旧版。",
+  "operations": [
+    {"op": "set", "target": "event", "path": "approved_at", "value": "2024-03-01"}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "CONTRADICTED",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

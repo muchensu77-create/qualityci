@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M024_VALIDATION_MISSING_LOCATOR",
+  "description": "验证结果声称PASS，但证据没有可定位锚点，不能支持放行。",
+  "operations": [
+    {"op": "set", "target": "event", "path": "validation_evidence", "value": [{"evidence_id": "VAL-SYN-001", "result": "PASS", "locator": "", "summary": "声称验证通过但未提供位置"}]}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "CONTRADICTED",
+    "QCI-R007": "PASS"
+  }
+}

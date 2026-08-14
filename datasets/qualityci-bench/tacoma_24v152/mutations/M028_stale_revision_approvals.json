@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M028_STALE_REVISION_APPROVALS",
+  "description": "质量与工艺负责人都批准了旧事件版本1，而当前事件版本为2。",
+  "operations": [
+    {"op": "set", "target": "event", "path": "approvals", "value": [{"role": "QUALITY_MANAGER", "decision": "APPROVED", "event_revision": "1", "approved_at": "2024-01-20"}, {"role": "PROCESS_OWNER", "decision": "APPROVED", "event_revision": "1", "approved_at": "2024-01-20"}]}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "CONTRADICTED"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/authorization-record-pack.schema.json",
+  "title": "QualityCI Raw Authorization Record Pack 0.1 / 0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "bundle_id", "members"],
+  "properties": {
+    "contract_version": {"enum": ["qualityci-authorization-record-pack-0.1", "qualityci-authorization-record-pack-0.2"]},
+    "bundle_id": {"type": "string", "minLength": 1, "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F])\\S(?:[\\s\\S]*\\S)?$"},
+    "members": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "x-canonicalOrderByNormalized": "record_id",
+      "x-uniqueByNormalized": ["record_id", "source_path"],
+      "x-sumMaximum": {"field": "size_bytes", "maximum": 4194304},
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["record_id", "source_path", "content_hash", "size_bytes", "format"],
+        "properties": {
+          "record_id": {"type": "string", "minLength": 1, "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F])\\S(?:[\\s\\S]*\\S)?$"},
+          "source_path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!\\.{1,2}(?:/|$))(?![\\s\\S]*/\\.{1,2}(?:/|$))(?![\\s\\S]*//)(?![\\s\\S]*\\\\)(?![\\s\\S]*/$)(?![\\s\\S]*[\\u0000-\\u001F])\\S(?:[\\s\\S]*\\S)?$"},
+          "content_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+          "size_bytes": {"type": "integer", "minimum": 1, "maximum": 262144},
+          "format": {"const": "JSON"}
+        }
+      }
+    }
+  }
+}

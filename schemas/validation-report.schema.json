@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/validation-report.schema.json",
+  "title": "QualityCI Byte-Bound Validation Report 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "case_schema_version", "case_subject_hash", "claim", "event_id",
+    "event_revision", "evidence_id", "evidence_type", "issued_at",
+    "issuer_id", "issuer_role", "locator", "performed_at", "result",
+    "ruleset_version", "scope_digest", "summary"
+  ],
+  "properties": {
+    "case_schema_version": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "case_subject_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "claim": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "event_id": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "event_revision": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "evidence_id": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "evidence_type": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "issued_at": {"type": "string", "format": "date-time", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\\.[0-9]+)?Z$"},
+    "issuer_id": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "issuer_role": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "locator": {"type": "string", "minLength": 1, "pattern": "^(?![.]{1,2}#/result$)(?![\\s\\S]*[\\u0000-\\u001F])[^/\\\\#\\s](?:[^/\\\\#]*[^/\\\\#\\s])?#/result$"},
+    "performed_at": {"type": "string", "format": "date-time", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\\.[0-9]+)?Z$"},
+    "result": {"enum": ["PASS", "FAIL", "PENDING"]},
+    "ruleset_version": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "scope_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "summary": {"type": "string"}
+  }
+}

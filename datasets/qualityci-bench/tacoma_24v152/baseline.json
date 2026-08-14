@@ -1,0 +1,158 @@
+{
+  "schema_version": "qualityci-case-0.3",
+  "case_id": "QCI-NHTSA-24V152-SYN-001",
+  "title": "后桥螺母座面焊渣防护变更质量回归（合成）",
+  "synthetic_for_competition": true,
+  "source_provenance": [
+    {
+      "type": "PUBLIC_REGULATORY_REPORT",
+      "url": "https://static.nhtsa.gov/odi/rcl/2024/RMISC-24V152-7847.pdf",
+      "use": "缺陷链与变更背景"
+    },
+    {
+      "type": "PUBLIC_REPAIR_INSTRUCTION",
+      "url": "https://static.nhtsa.gov/odi/rcl/2024/RCRIT-24V152-2785.pdf",
+      "use": "检查、清理、复核动作背景"
+    }
+  ],
+  "event": {
+    "event_id": "ECO-SYN-001",
+    "event_type": "ENGINEERING_CHANGE",
+    "revision": "2",
+    "approved_at": "2024-02-01",
+    "risk_level": "HIGH",
+    "affected_process_steps": ["WELD-10", "INSPECT-40"],
+    "affected_characteristics": ["CTQ-NUT-SEAT-SPATTER"],
+    "affected_links": [
+      {"process_step_id": "WELD-10", "characteristic_id": "CTQ-NUT-SEAT-SPATTER"}
+    ],
+    "change_summary": "统一防飞溅挡板安装并强化螺母座面100%目视检查（比赛合成）",
+    "validation_evidence": [
+      {
+        "evidence_id": "VAL-SYN-001",
+        "result": "PASS",
+        "locator": "synthetic-validation-report#section-4",
+        "summary": "合成验证批次中座面焊渣检出与处置流程通过"
+      }
+    ],
+    "approvals": [
+      {"role": "QUALITY_MANAGER", "decision": "APPROVED", "event_revision": "2", "approved_at": "2024-02-01"},
+      {"role": "PROCESS_OWNER", "decision": "APPROVED", "event_revision": "2", "approved_at": "2024-02-01"}
+    ]
+  },
+  "documents": [
+    {
+      "document_id": "PF-AXLE-SYN",
+      "document_type": "PROCESS_FLOW",
+      "revision": "B",
+      "status": "APPROVED",
+      "owner": "PROCESS_ENGINEERING",
+      "revision_date": "2024-02-02",
+      "source_hash": "synthetic-pf-b",
+      "fields": {
+        "process_steps": ["WELD-10", "CLEAN-20", "ASSEMBLE-30", "INSPECT-40"]
+      }
+    },
+    {
+      "document_id": "PFMEA-AXLE-SYN",
+      "document_type": "PFMEA",
+      "revision": "B",
+      "status": "APPROVED",
+      "owner": "QUALITY_ENGINEERING",
+      "revision_date": "2024-02-02",
+      "source_hash": "synthetic-pfmea-b",
+      "fields": {
+        "process_steps": ["WELD-10", "CLEAN-20", "ASSEMBLE-30", "INSPECT-40"],
+        "risks": [
+          {
+            "failure_mode_id": "FM-SPATTER-SEAT",
+            "process_step_id": "WELD-10",
+            "characteristic_id": "CTQ-NUT-SEAT-SPATTER",
+            "special_characteristic": true,
+            "effect": "螺母座面夹紧保持能力降低",
+            "locator": "PFMEA!row-18"
+          }
+        ]
+      }
+    },
+    {
+      "document_id": "CP-AXLE-SYN",
+      "document_type": "CONTROL_PLAN",
+      "revision": "B",
+      "status": "APPROVED",
+      "owner": "QUALITY_ENGINEERING",
+      "revision_date": "2024-02-03",
+      "source_hash": "84320ac715e35488a6fd572bfb727fb4ffd98408cd20038aac840d32f85d6efa",
+      "fields": {
+        "process_steps": ["WELD-10", "CLEAN-20", "ASSEMBLE-30", "INSPECT-40"],
+        "characteristics": [
+          {
+            "control_id": "CTRL-SPATTER-SEAT",
+            "process_step_id": "WELD-10",
+            "characteristic_id": "CTQ-NUT-SEAT-SPATTER",
+            "specification": {"target": 0, "minimum": 0, "maximum": 0, "unit": "visible_particle"},
+            "control_method": "100%目视检查",
+            "frequency": "每件",
+            "reaction_plan": "隔离、清除焊渣、复检；损伤时升级评审",
+            "locator": "ControlPlan!F12:K12"
+          }
+        ]
+      }
+    },
+    {
+      "document_id": "SOP-AXLE-SYN",
+      "document_type": "SOP",
+      "revision": "B",
+      "status": "APPROVED",
+      "owner": "PROCESS_ENGINEERING",
+      "revision_date": "2024-02-03",
+      "source_hash": "d464245d07f6889c3dec2e5baf4e282ee111309e0ac4d3295f8baf2b20f04780",
+      "fields": {
+        "process_steps": ["WELD-10"],
+        "characteristics": [
+          {
+            "process_step_id": "WELD-10",
+            "characteristic_id": "CTQ-NUT-SEAT-SPATTER",
+            "specification": {"target": 0, "minimum": 0, "maximum": 0, "unit": "visible_particle"},
+            "locator": "SOP#page-4.step-7"
+          }
+        ]
+      }
+    },
+    {
+      "document_id": "IR-AXLE-SYN",
+      "document_type": "INSPECTION_RECORD",
+      "revision": "B",
+      "status": "APPROVED",
+      "owner": "QUALITY_INSPECTION",
+      "revision_date": "2024-02-04",
+      "source_hash": "11ee6b77bac03dda2c06ac352aa6cc72da34063b2c5448cb31422b647fb71596",
+      "reference_contract_version": "qualityci-controlled-reference-0.1",
+      "fields": {
+        "process_steps": ["WELD-10"],
+        "references": {
+          "SOP": {
+            "document_type": "SOP",
+            "document_id": "SOP-AXLE-SYN",
+            "revision": "B",
+            "source_hash": "d464245d07f6889c3dec2e5baf4e282ee111309e0ac4d3295f8baf2b20f04780"
+          },
+          "CONTROL_PLAN": {
+            "document_type": "CONTROL_PLAN",
+            "document_id": "CP-AXLE-SYN",
+            "revision": "B",
+            "source_hash": "84320ac715e35488a6fd572bfb727fb4ffd98408cd20038aac840d32f85d6efa"
+          }
+        },
+        "characteristics": [
+          {
+            "process_step_id": "WELD-10",
+            "characteristic_id": "CTQ-NUT-SEAT-SPATTER",
+            "specification": {"target": 0, "minimum": 0, "maximum": 0, "unit": "visible_particle"},
+            "locator": "InspectionRecord!H9:L9"
+          }
+        ]
+      }
+    }
+  ]
+}

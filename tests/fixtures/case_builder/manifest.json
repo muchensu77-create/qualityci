@@ -1,0 +1,157 @@
+{
+  "manifest_version": "qualityci-case-builder-0.4",
+  "case": {
+    "case_id": "QCI-BUILDER-SYN-001",
+    "title": "合成焊接飞溅控制回归",
+    "synthetic_for_competition": true,
+    "source_provenance": [
+      {
+        "type": "TEAM_SYNTHETIC_TABLE_PACK",
+        "url": "https://qualityci.local/synthetic/case-builder-pack",
+        "use": "演示显式列映射，不含客户数据"
+      }
+    ]
+  },
+  "event": {
+    "event_id": "ECO-BUILDER-SYN-001",
+    "event_type": "ENGINEERING_CHANGE",
+    "revision": "2",
+    "approved_at": "2026-08-01",
+    "risk_level": "HIGH",
+    "affected_process_steps": ["WELD-10", "INSPECT-40"],
+    "affected_characteristics": ["CTQ-NUT-SEAT-SPATTER"],
+    "affected_links": [
+      {
+        "process_step_id": "WELD-10",
+        "characteristic_id": "CTQ-NUT-SEAT-SPATTER"
+      }
+    ],
+    "change_summary": "合成案例：增加防飞溅与100%目视检验",
+    "validation_plan": {
+      "contract_version": "qualityci-validation-plan-0.1",
+      "required_evidence": [
+      {
+        "evidence_id": "VAL-BUILDER-SYN-001",
+        "evidence_type": "PROCESS_CHANGE_VALIDATION",
+        "claim": "WELD_AND_INSPECTION_CHANGE_EFFECTIVE",
+        "issuer_id": "SYNTHETIC-LAB",
+        "issuer_role": "VALIDATION_OWNER",
+        "valid_from": "2024-01-01T00:00:00Z",
+        "valid_until": "2024-12-31T23:59:59Z"
+      }
+      ]
+    },
+    "approvals": [
+      {
+        "role": "QUALITY_MANAGER",
+        "decision": "APPROVED",
+        "event_revision": "2",
+        "approved_at": "2026-08-01"
+      },
+      {
+        "role": "PROCESS_OWNER",
+        "decision": "APPROVED",
+        "event_revision": "2",
+        "approved_at": "2026-08-01"
+      }
+    ],
+    "provenance": {
+      "kind": "MANIFEST_LITERAL",
+      "locator": "manifest.json#event"
+    }
+  },
+  "documents": [
+    {
+      "source_id": "process-flow-table",
+      "source_path": "process_flow.csv",
+      "document_id": "PF-BUILDER-SYN",
+      "document_type": "PROCESS_FLOW",
+      "revision": "B",
+      "status": "APPROVED",
+      "owner": "PROCESS_ENGINEERING",
+      "revision_date": "2026-08-02",
+      "columns": {
+        "process_step_id": "process_step_id"
+      }
+    },
+    {
+      "source_id": "pfmea-table",
+      "source_path": "pfmea.csv",
+      "document_id": "PFMEA-BUILDER-SYN",
+      "document_type": "PFMEA",
+      "revision": "B",
+      "status": "APPROVED",
+      "owner": "QUALITY_ENGINEERING",
+      "revision_date": "2026-08-02",
+      "columns": {
+        "process_step_id": "process_step_id",
+        "failure_mode_id": "failure_mode_id",
+        "characteristic_id": "characteristic_id",
+        "special_characteristic": "special_characteristic",
+        "effect": "effect"
+      }
+    },
+    {
+      "source_id": "control-plan-table",
+      "source_path": "control_plan.csv",
+      "document_id": "CP-BUILDER-SYN",
+      "document_type": "CONTROL_PLAN",
+      "revision": "B",
+      "status": "APPROVED",
+      "owner": "QUALITY_ENGINEERING",
+      "revision_date": "2026-08-03",
+      "columns": {
+        "process_step_id": "process_step_id",
+        "control_id": "control_id",
+        "characteristic_id": "characteristic_id",
+        "target": "target",
+        "minimum": "minimum",
+        "maximum": "maximum",
+        "unit": "unit",
+        "control_method": "control_method",
+        "frequency": "frequency",
+        "reaction_plan": "reaction_plan"
+      }
+    },
+    {
+      "source_id": "sop-table",
+      "source_path": "sop.csv",
+      "document_id": "SOP-BUILDER-SYN",
+      "document_type": "SOP",
+      "revision": "B",
+      "status": "APPROVED",
+      "owner": "PROCESS_ENGINEERING",
+      "revision_date": "2026-08-03",
+      "columns": {
+        "process_step_id": "process_step_id",
+        "characteristic_id": "characteristic_id",
+        "target": "target",
+        "minimum": "minimum",
+        "maximum": "maximum",
+        "unit": "unit"
+      }
+    },
+    {
+      "source_id": "inspection-record-table",
+      "source_path": "inspection_record.csv",
+      "document_id": "IR-BUILDER-SYN",
+      "document_type": "INSPECTION_RECORD",
+      "revision": "B",
+      "status": "APPROVED",
+      "owner": "QUALITY_INSPECTION",
+      "revision_date": "2026-08-04",
+      "columns": {
+        "process_step_id": "process_step_id",
+        "characteristic_id": "characteristic_id",
+        "target": "target",
+        "minimum": "minimum",
+        "maximum": "maximum",
+        "unit": "unit",
+        "sop_document_id": "sop_document_id",
+        "sop_revision": "sop_revision",
+        "control_plan_document_id": "control_plan_document_id",
+        "control_plan_revision": "control_plan_revision"
+      }
+    }
+  ]
+}

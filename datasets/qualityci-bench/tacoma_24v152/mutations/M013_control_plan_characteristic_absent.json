@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M013_CONTROL_PLAN_CHARACTERISTIC_ABSENT",
+  "description": "控制计划完全遗漏受影响特殊特性，导致规格不可比较且控制未承接。",
+  "operations": [
+    {"op": "set", "document_id": "CP-AXLE-SYN", "path": "fields.characteristics", "value": []}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "CONTRADICTED",
+    "QCI-R002": "UNVERIFIABLE",
+    "QCI-R003": "CONTRADICTED",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

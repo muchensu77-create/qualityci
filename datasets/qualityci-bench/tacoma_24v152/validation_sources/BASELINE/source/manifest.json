@@ -1,0 +1,13 @@
+{
+  "contract_version": "qualityci-validation-evidence-pack-0.1",
+  "phase": "SOURCE",
+  "members": [
+    {
+      "source_id": "synthetic-validation-baseline",
+      "evidence_id": "VAL-SYN-001",
+      "source_path": "source_report.json",
+      "format": "JSON",
+      "phase": "SOURCE"
+    }
+  ]
+}

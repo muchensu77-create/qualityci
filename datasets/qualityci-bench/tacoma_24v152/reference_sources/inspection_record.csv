@@ -1,0 +1,2 @@
+process_step_id,characteristic_id,target,minimum,maximum,unit,sop_document_id,sop_revision,control_plan_document_id,control_plan_revision
+WELD-10,CTQ-NUT-SEAT-SPATTER,0,0,0,visible_particle,SOP-AXLE-SYN,B,CP-AXLE-SYN,B

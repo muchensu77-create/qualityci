@@ -1,0 +1,17 @@
+{
+  "mutation_id": "M010_MISSING_AFFECTED_CHARACTERISTIC_SCOPE",
+  "description": "工程变更未声明受影响特性，无法验证跨文档规格一致性。",
+  "operations": [
+    {"op": "set", "target": "event", "path": "affected_characteristics", "value": []},
+    {"op": "set", "target": "event", "path": "affected_links", "value": []}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "UNVERIFIABLE",
+    "QCI-R002": "UNVERIFIABLE",
+    "QCI-R003": "UNVERIFIABLE",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

@@ -1,0 +1,2 @@
+process_step_id,characteristic_id,target,minimum,maximum,unit
+WELD-10,CTQ-NUT-SEAT-SPATTER,0,0,0,visible_particle

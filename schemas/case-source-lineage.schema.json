@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/case-source-lineage.schema.json",
+  "title": "QualityCI Case source lineage 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "lineage_hash",
+    "root_binding_hash",
+    "parent_lineage_hash",
+    "input_case_hash",
+    "operation_kind",
+    "operation_contract_version",
+    "operation_material_hash",
+    "operation_material",
+    "output_case_hash"
+  ],
+  "properties": {
+    "contract_version": {"const": "qualityci-case-source-lineage-0.1"},
+    "lineage_hash": {"$ref": "#/$defs/hash"},
+    "root_binding_hash": {"$ref": "#/$defs/hash"},
+    "parent_lineage_hash": {"$ref": "#/$defs/nullableHash"},
+    "input_case_hash": {"$ref": "#/$defs/hash"},
+    "operation_kind": {"enum": ["MUTATION", "NATIVE_REPLAY"]},
+    "operation_contract_version": {
+      "enum": [
+        "qualityci-case-source-mutation-operation-0.1",
+        "qualityci-case-source-native-replay-operation-0.1"
+      ]
+    },
+    "operation_material_hash": {"$ref": "#/$defs/hash"},
+    "operation_material": {},
+    "output_case_hash": {"$ref": "#/$defs/hash"}
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "operation_kind": {"const": "MUTATION"},
+        "operation_contract_version": {
+          "const": "qualityci-case-source-mutation-operation-0.1"
+        },
+        "operation_material": {"$ref": "#/$defs/mutationMaterial"}
+      }
+    },
+    {
+      "properties": {
+        "operation_kind": {"const": "NATIVE_REPLAY"},
+        "operation_contract_version": {
+          "const": "qualityci-case-source-native-replay-operation-0.1"
+        },
+        "operation_material": {"$ref": "#/$defs/nativeReplayMaterial"}
+      }
+    }
+  ],
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableHash": {
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/hash"}]
+    },
+    "nonblank": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F\\u007F])\\S(?:[\\s\\S]*\\S)?$"
+    },
+    "blob": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_hash", "size_bytes"],
+      "properties": {
+        "source_hash": {"$ref": "#/$defs/hash"},
+        "size_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "taggedValue": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["present"],
+          "properties": {"present": {"const": false}}
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["present", "json"],
+          "properties": {"present": {"const": true}, "json": {}}
+        }
+      ]
+    },
+    "mutationOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "op",
+        "target",
+        "document_id",
+        "path",
+        "value"
+      ],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 0, "maximum": 9999},
+        "op": {"enum": ["set", "delete"]},
+        "target": {"enum": ["document", "event", "case"]},
+        "document_id": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/nonblank"}]
+        },
+        "path": {"$ref": "#/$defs/nonblank"},
+        "value": {"$ref": "#/$defs/taggedValue"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"target": {"const": "document"}}},
+          "then": {"properties": {"document_id": {"$ref": "#/$defs/nonblank"}}},
+          "else": {"properties": {"document_id": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"op": {"const": "set"}}},
+          "then": {"properties": {"value": {"properties": {"present": {"const": true}}}}},
+          "else": {"properties": {"value": {"properties": {"present": {"const": false}}}}}
+        }
+      ]
+    },
+    "nativeOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "op",
+        "target",
+        "document_id",
+        "path",
+        "value"
+      ],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 0, "maximum": 9999},
+        "op": {"const": "set"},
+        "target": {"const": "document"},
+        "document_id": {"$ref": "#/$defs/nonblank"},
+        "path": {"$ref": "#/$defs/nonblank"},
+        "value": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["present", "json"],
+          "properties": {"present": {"const": true}, "json": {}}
+        }
+      }
+    },
+    "mutationMaterial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_kind",
+        "operation_contract_version",
+        "mutation_blob",
+        "mutation_id",
+        "applied_operations"
+      ],
+      "properties": {
+        "operation_kind": {"const": "MUTATION"},
+        "operation_contract_version": {
+          "const": "qualityci-case-source-mutation-operation-0.1"
+        },
+        "mutation_blob": {"$ref": "#/$defs/blob"},
+        "mutation_id": {"$ref": "#/$defs/nonblank"},
+        "applied_operations": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10000,
+          "items": {"$ref": "#/$defs/mutationOperation"}
+        }
+      }
+    },
+    "nativeReplayMaterial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_kind",
+        "operation_contract_version",
+        "native_resolution_blob",
+        "resolution_id",
+        "applied_operations",
+        "artifact_set_hash",
+        "artifact_contract_version",
+        "controlled_reference_set_hash",
+        "reference_contract_version",
+        "source_validation_evidence_set_hash",
+        "resolved_validation_evidence_set_hash",
+        "validation_evidence_pair_hash",
+        "validation_evidence_contract_version",
+        "approval_subject_hash",
+        "approval_subject_contract_version",
+        "approval_assertion_set_hash",
+        "approval_assertion_set_domain_version",
+        "authorization_authenticity_state",
+        "authorization_authenticity_context_hash",
+        "authorization_authenticity_context_contract_version",
+        "authorization_record_set_hash",
+        "authorization_record_set_contract_version",
+        "authorization_trust_snapshot_hash",
+        "authorization_trust_snapshot_contract_version",
+        "authorization_trust_policy_hash",
+        "authorization_trust_policy_version"
+      ],
+      "properties": {
+        "operation_kind": {"const": "NATIVE_REPLAY"},
+        "operation_contract_version": {
+          "const": "qualityci-case-source-native-replay-operation-0.1"
+        },
+        "native_resolution_blob": {"$ref": "#/$defs/blob"},
+        "resolution_id": {"$ref": "#/$defs/nonblank"},
+        "applied_operations": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10000,
+          "items": {"$ref": "#/$defs/nativeOperation"}
+        },
+        "artifact_set_hash": {"$ref": "#/$defs/hash"},
+        "artifact_contract_version": {"const": "qualityci-revision-artifact-0.3"},
+        "controlled_reference_set_hash": {"$ref": "#/$defs/hash"},
+        "reference_contract_version": {"const": "qualityci-controlled-reference-0.1"},
+        "source_validation_evidence_set_hash": {"$ref": "#/$defs/hash"},
+        "resolved_validation_evidence_set_hash": {"$ref": "#/$defs/hash"},
+        "validation_evidence_pair_hash": {"$ref": "#/$defs/hash"},
+        "validation_evidence_contract_version": {"const": "qualityci-validation-evidence-0.1"},
+        "approval_subject_hash": {"$ref": "#/$defs/hash"},
+        "approval_subject_contract_version": {"const": "qualityci-approval-subject-0.2"},
+        "approval_assertion_set_hash": {"$ref": "#/$defs/hash"},
+        "approval_assertion_set_domain_version": {"const": "QualityCI/approval-assertion-set/v1"},
+        "authorization_authenticity_state": {"const": "PASS"},
+        "authorization_authenticity_context_hash": {"$ref": "#/$defs/hash"},
+        "authorization_authenticity_context_contract_version": {"const": "qualityci-authorization-authenticity-context-0.1"},
+        "authorization_record_set_hash": {"$ref": "#/$defs/hash"},
+        "authorization_record_set_contract_version": {"const": "qualityci-authorization-record-set-0.2"},
+        "authorization_trust_snapshot_hash": {"$ref": "#/$defs/hash"},
+        "authorization_trust_snapshot_contract_version": {"const": "qualityci-authorization-trust-snapshot-0.1"},
+        "authorization_trust_policy_hash": {"$ref": "#/$defs/hash"},
+        "authorization_trust_policy_version": {"const": "qualityci-authorization-trust-policy-0.1"}
+      }
+    }
+  }
+}

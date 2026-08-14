@@ -1,0 +1,20 @@
+{
+  "mutation_id": "M030_MULTI_RULE_RELEASE_BLOCKER",
+  "description": "组合故障：PFMEA漏工序、SOP规格冲突、控制计划缺反应计划、验证证据缺失且高风险审批为空。",
+  "operations": [
+    {"op": "set", "document_id": "PFMEA-AXLE-SYN", "path": "fields.risks", "value": [{"failure_mode_id": "FM-SPATTER-SEAT", "process_step_id": "CLEAN-20", "characteristic_id": "CTQ-NUT-SEAT-SPATTER", "special_characteristic": true, "effect": "螺母座面夹紧保持能力降低", "locator": "PFMEA!row-18"}]},
+    {"op": "set", "document_id": "SOP-AXLE-SYN", "path": "fields.characteristics", "value": [{"process_step_id": "WELD-10", "characteristic_id": "CTQ-NUT-SEAT-SPATTER", "specification": {"target": 0, "minimum": 0, "maximum": 1, "unit": "visible_particle"}, "locator": "SOP#page-4.step-7"}]},
+    {"op": "set", "document_id": "CP-AXLE-SYN", "path": "fields.characteristics", "value": [{"control_id": "CTRL-SPATTER-SEAT", "process_step_id": "WELD-10", "characteristic_id": "CTQ-NUT-SEAT-SPATTER", "specification": {"target": 0, "minimum": 0, "maximum": 0, "unit": "visible_particle"}, "control_method": "100%目视检查", "frequency": "每件", "reaction_plan": "", "locator": "ControlPlan!F12:K12"}]},
+    {"op": "delete", "target": "event", "path": "validation_evidence"},
+    {"op": "set", "target": "event", "path": "approvals", "value": []}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "CONTRADICTED",
+    "QCI-R002": "CONTRADICTED",
+    "QCI-R003": "CONTRADICTED",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "UNVERIFIABLE",
+    "QCI-R007": "CONTRADICTED"
+  }
+}

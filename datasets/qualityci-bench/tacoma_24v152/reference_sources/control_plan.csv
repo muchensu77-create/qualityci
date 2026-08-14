@@ -1,0 +1,2 @@
+process_step_id,control_id,characteristic_id,target,minimum,maximum,unit,control_method,frequency,reaction_plan
+WELD-10,CTRL-SPATTER-SEAT,CTQ-NUT-SEAT-SPATTER,0,0,0,visible_particle,100%目视检查,每件,隔离、清除焊渣、复检；损伤时升级评审

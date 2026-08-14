@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/authorization-trust-snapshot.schema.json",
+  "title": "QualityCI Static Authorization Trust Snapshot 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "x-maxCanonicalUtf8Bytes": 262144,
+  "x-maxJsonDepth": 16,
+  "x-runtimeCrossFieldChecks": [
+    "issuer_keys-duplicate-normalized-identity=>CONTRADICTED",
+    "issuer-effective_from<=issuer-expires_at",
+    "revoked_at<=snapshot-issued_at",
+    "canonical-json-bytes"
+  ],
+  "required": [
+    "contract_version", "snapshot_id", "snapshot_sequence", "issued_at",
+    "trust_domain", "anchor_id", "signature_algorithm", "issuer_keys", "signature"
+  ],
+  "properties": {
+    "contract_version": {"const": "qualityci-authorization-trust-snapshot-0.1"},
+    "snapshot_id": {"type": "string", "minLength": 1, "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F])\\S(?:[\\s\\S]*\\S)?$"},
+    "snapshot_sequence": {"type": "integer", "minimum": 1},
+    "issued_at": {"$ref": "#/$defs/utc"},
+    "trust_domain": {"type": "string", "minLength": 1, "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F])\\S(?:[\\s\\S]*\\S)?$"},
+    "anchor_id": {"type": "string", "minLength": 1, "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F])\\S(?:[\\s\\S]*\\S)?$"},
+    "signature_algorithm": {"const": "ED25519"},
+    "issuer_keys": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"$ref": "#/$defs/issuer_key"}
+    },
+    "signature": {"type": "string", "minLength": 88, "maxLength": 88, "pattern": "^[A-Za-z0-9+/]{85}[AQgw]==$"}
+  },
+  "$defs": {
+    "utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F])[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\\.[0-9]+)?Z$"
+    },
+    "issuer_key": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issuer_id", "verification_key_id", "public_key",
+        "allowed_role_claims", "allowed_purpose_codes", "allowed_scope_codes",
+        "effective_from", "expires_at", "revocation_status", "revoked_at"
+      ],
+      "properties": {
+        "issuer_id": {"type": "string", "minLength": 1, "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F])\\S(?:[\\s\\S]*\\S)?$"},
+        "verification_key_id": {"type": "string", "minLength": 1, "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F])\\S(?:[\\s\\S]*\\S)?$"},
+        "public_key": {"type": "string", "minLength": 44, "maxLength": 44, "pattern": "^[A-Za-z0-9+/]{42}[AEIMQUYcgkosw048]=$"},
+        "allowed_role_claims": {
+          "type": "array",
+          "oneOf": [
+            {"const": ["PROCESS_OWNER"]},
+            {"const": ["QUALITY_MANAGER"]},
+            {"const": ["PROCESS_OWNER", "QUALITY_MANAGER"]}
+          ]
+        },
+        "allowed_purpose_codes": {
+          "type": "array", "minItems": 1, "maxItems": 1, "uniqueItems": true,
+          "items": {"const": "APPLY_APPROVED_RESOLUTION"}
+        },
+        "allowed_scope_codes": {
+          "type": "array", "minItems": 1, "maxItems": 1, "uniqueItems": true,
+          "items": {"const": "EXACT_SUBJECT"}
+        },
+        "effective_from": {"$ref": "#/$defs/utc"},
+        "expires_at": {"$ref": "#/$defs/utc"},
+        "revocation_status": {"enum": ["ACTIVE", "REVOKED", "UNKNOWN"]},
+        "revoked_at": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/utc"}]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"revocation_status": {"const": "REVOKED"}}},
+          "then": {"properties": {"revoked_at": {"$ref": "#/$defs/utc"}}},
+          "else": {"properties": {"revoked_at": {"type": "null"}}}
+        }
+      ]
+    }
+  }
+}

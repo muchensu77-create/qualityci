@@ -1,0 +1,70 @@
+{
+  "contract_version": "qualityci-controlled-reference-pack-0.1",
+  "documents": [
+    {
+      "source_id": "electronics-control-plan",
+      "source_path": "control_plan.csv",
+      "document_id": "CP-ELEC-SYN",
+      "document_type": "CONTROL_PLAN",
+      "revision": "C",
+      "status": "APPROVED",
+      "owner": "QUALITY_ENGINEERING",
+      "revision_date": "2026-07-03",
+      "columns": {
+        "process_step_id": "process_step_id",
+        "control_id": "control_id",
+        "characteristic_id": "characteristic_id",
+        "target": "target",
+        "minimum": "minimum",
+        "maximum": "maximum",
+        "unit": "unit",
+        "control_method": "control_method",
+        "frequency": "frequency",
+        "reaction_plan": "reaction_plan"
+      },
+      "header_row": 1
+    },
+    {
+      "source_id": "electronics-inspection",
+      "source_path": "inspection_record.csv",
+      "document_id": "IR-ELEC-SYN",
+      "document_type": "INSPECTION_RECORD",
+      "revision": "C",
+      "status": "APPROVED",
+      "owner": "QUALITY_INSPECTION",
+      "revision_date": "2026-07-04",
+      "columns": {
+        "process_step_id": "process_step_id",
+        "characteristic_id": "characteristic_id",
+        "target": "target",
+        "minimum": "minimum",
+        "maximum": "maximum",
+        "unit": "unit",
+        "sop_document_id": "sop_document_id",
+        "sop_revision": "sop_revision",
+        "control_plan_document_id": "control_plan_document_id",
+        "control_plan_revision": "control_plan_revision"
+      },
+      "header_row": 1
+    },
+    {
+      "source_id": "electronics-sop",
+      "source_path": "sop.csv",
+      "document_id": "SOP-ELEC-SYN",
+      "document_type": "SOP",
+      "revision": "C",
+      "status": "APPROVED",
+      "owner": "PROCESS_ENGINEERING",
+      "revision_date": "2026-07-03",
+      "columns": {
+        "process_step_id": "process_step_id",
+        "characteristic_id": "characteristic_id",
+        "target": "target",
+        "minimum": "minimum",
+        "maximum": "maximum",
+        "unit": "unit"
+      },
+      "header_row": 1
+    }
+  ]
+}

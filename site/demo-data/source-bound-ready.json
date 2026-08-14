@@ -1,0 +1,20 @@
+{
+  "scenario_id": "ready",
+  "synthetic": true,
+  "status": "READY FOR HUMAN REVIEW",
+  "status_class": "is-ready",
+  "title": "来源绑定回归通过，进入人工放行评审",
+  "copy": "同一次受限捕获的原始源包、验证证据与当前规则全部闭合，系统生成可审计的候选结果。",
+  "points": [
+    "模式：SOURCE_ROOTED_RUN，trusted true",
+    "来源：CASE_BUILDER_SYNTHETIC / BASELINE",
+    "处理：进入人工放行评审，不自动批准参数"
+  ],
+  "result": {
+    "mode": "SOURCE_ROOTED_RUN",
+    "trusted": true,
+    "overall_status": "PASS",
+    "case_source_assurance_state": "BOUND_RAW_SOURCE_CASE",
+    "team_state": "READY_FOR_HUMAN_RELEASE_REVIEW"
+  }
+}

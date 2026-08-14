@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="QualityCI 制造业工程变更与失效复发验证 Agent 本地演示">
+  <title>QualityCI · 工业质量回归基础设施</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="QualityCI 首页">
+      <span class="brand-mark" aria-hidden="true">Q</span>
+      <span><strong>QualityCI</strong><small>工业质量回归基础设施</small></span>
+    </a>
+    <div class="topbar-meta">
+      <span class="live-dot"><i></i>本地演示</span>
+      <span class="synthetic-chip">合成数据 · 非产线决策</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">GOAI 2026 · AI + 工业制造</p>
+        <h1>让每次工程变更，<br><span>都跑一次质量回归。</span></h1>
+        <p class="hero-copy">QualityCI 将 ECO 与质量异常编译成可执行检查。A08 Actual 只从服务端白名单原始源包与验证包生成；旧 Tacoma 序列化 Case 仅供回归评估。</p>
+      </div>
+      <div class="hero-side" aria-label="安全原则">
+        <span>01</span><p><strong>三态判定</strong>PASS / CONTRADICTED / UNVERIFIABLE</p>
+        <span>02</span><p><strong>证据可追溯</strong>文档、版本、定位符与摘要</p>
+        <span>03</span><p><strong>人工审批门</strong>高风险修订不自动放行</p>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <aside class="control-panel">
+        <div class="panel-heading">
+          <p class="step-label">STEP 1</p>
+          <h2>选择故障注入</h2>
+          <p>基于公开召回背景重构的显著合成质量文件包。</p>
+        </div>
+        <label for="mutation-select">演示场景</label>
+        <select id="mutation-select" aria-describedby="mutation-description"></select>
+        <p id="mutation-description" class="helper-text"></p>
+        <div class="button-row">
+          <button id="run-button" class="primary-button" type="button">运行质量回归</button>
+          <button id="baseline-button" class="ghost-button" type="button">查看干净基线</button>
+        </div>
+
+        <div class="divider"></div>
+        <div class="panel-heading compact">
+          <p class="step-label">A08 ACTUAL</p>
+          <h2>运行白名单源包</h2>
+          <p>服务端捕获 CASE_BUILDER 五份原始表格与原始验证报告，返回 RunResult v0.2 / identity v4 和 Team 0.2 Trace。</p>
+        </div>
+        <button id="source-button" class="success-button" type="button">运行 CASE_BUILDER_SYNTHETIC Actual</button>
+
+        <div class="divider"></div>
+        <div class="panel-heading compact">
+          <p class="step-label">LEGACY NEGATIVE CONTROL</p>
+          <h2>旧 Tacoma 复跑门禁</h2>
+          <p>预置合成批准记录仍缺少 A08 整体 Case 原始源根与有序派生材料；下列两种旧复跑都必须返回 409。</p>
+        </div>
+        <div class="button-stack">
+          <button id="blocked-button" class="danger-button" type="button" aria-describedby="approval-note">旧记录仅工艺批准：验证 409</button>
+          <button id="approved-button" class="danger-button" type="button" aria-describedby="approval-note">旧记录双角色批准：仍验证 409</button>
+        </div>
+        <p id="approval-note" class="safety-note">旧 Tacoma replay 固定为 <code>EVALUATION_UNBOUND</code>：服务端返回 <code>409 A08_SOURCE_PACK_REQUIRED</code>，不生成、不保存基线。页面不接收本地路径、客户文件或任意补丁。
+        </p>
+      </aside>
+
+      <section class="result-panel" aria-busy="true" id="result-panel">
+        <div class="result-topline">
+          <div>
+            <p class="step-label">LIVE RESULT</p>
+            <h2 id="case-title">正在载入主案例…</h2>
+          </div>
+          <span id="overall-status" class="status-pill neutral" role="status" aria-live="polite" aria-atomic="true">WAITING</span>
+        </div>
+        <p id="case-summary" class="case-summary"></p>
+        <div id="notification" class="notification hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+
+        <div class="metric-grid" id="metric-grid">
+          <article><span>规则</span><strong id="metric-total">—</strong></article>
+          <article><span>PASS</span><strong id="metric-pass">—</strong></article>
+          <article><span>矛盾</span><strong id="metric-contradicted">—</strong></article>
+          <article><span>证据不足</span><strong id="metric-unverifiable">—</strong></article>
+        </div>
+
+        <section class="impact-section">
+          <div class="section-heading">
+            <h3>影响分析</h3><span id="run-id">尚未绑定场景与运行</span>
+          </div>
+          <div id="impact-grid" class="impact-grid"></div>
+          <ol id="reasoning-path" class="reasoning-path"></ol>
+        </section>
+
+        <section class="agent-section" aria-labelledby="agent-trace-heading">
+          <div class="section-heading">
+            <h3 id="agent-trace-heading">四 Agent 协同 Trace</h3>
+            <span id="agent-runtime">LOCAL_DETERMINISTIC_CONTRACT</span>
+          </div>
+          <div class="runtime-disclosure">
+            <strong>当前：本地确定性协同契约</strong>
+            <span aria-hidden="true">→</span>
+            <strong>AgentTeams runtime Next</strong>
+          </div>
+          <p class="agent-note">当前 Trace 是可执行的本地确定性编排证据，不表示 AgentTeams runtime 已完成接入。</p>
+          <ol id="agent-trace" class="agent-trace"></ol>
+        </section>
+
+        <section class="findings-section">
+          <div class="section-heading">
+            <h3>规则与证据</h3><span>点击卡片查看检查细节</span>
+          </div>
+          <div id="findings" class="findings"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>QualityCI prototype · 全部案例数据均标注为比赛合成数据</p>
+    <p>自动检查不代替质量工程师对参数正确性与产品放行的判断</p>
+  </footer>
+</body>
+</html>

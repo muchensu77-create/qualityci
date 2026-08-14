@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/validation-approval-policy.schema.json",
+  "title": "QualityCI Validation Approval Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "validation_evidence_contract_version",
+    "required_phases",
+    "source_case_subject_hash",
+    "source_scope_digest",
+    "resolved_case_subject_hash",
+    "resolved_scope_digest"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "qualityci-validation-approval-policy-0.1"
+    },
+    "validation_evidence_contract_version": {
+      "const": "qualityci-validation-evidence-0.1"
+    },
+    "required_phases": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "SOURCE"},
+        {"const": "RESOLVED"}
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "source_case_subject_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_scope_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "resolved_case_subject_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "resolved_scope_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M019_STALE_PROCESS_FLOW_WITHOUT_WAIVER",
+  "description": "过程流程图修订日期早于工程变更批准，且没有有效结构化豁免。",
+  "operations": [
+    {"op": "set", "document_id": "PF-AXLE-SYN", "path": "revision_date", "value": "2024-01-15"}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "CONTRADICTED",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

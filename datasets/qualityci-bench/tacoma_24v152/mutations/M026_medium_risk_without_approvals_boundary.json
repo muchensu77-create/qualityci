@@ -1,0 +1,17 @@
+{
+  "mutation_id": "M026_MEDIUM_RISK_WITHOUT_APPROVALS_BOUNDARY",
+  "description": "事件降为MEDIUM且无审批；高风险专用审批门不应误触发。",
+  "operations": [
+    {"op": "set", "target": "event", "path": "risk_level", "value": "MEDIUM"},
+    {"op": "set", "target": "event", "path": "approvals", "value": []}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

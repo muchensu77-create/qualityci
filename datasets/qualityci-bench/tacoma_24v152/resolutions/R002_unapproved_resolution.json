@@ -1,0 +1,10 @@
+{
+  "resolution_id": "RES-SYN-BLOCKED",
+  "description": "用于验证审批门：只有工艺负责人批准。",
+  "approvals": [
+    {"role": "PROCESS_OWNER", "decision": "APPROVED", "case_id": "QCI-NHTSA-24V152-SYN-001", "event_id": "ECO-SYN-001", "event_revision": "2", "approved_case_hash": "942a52b7a64846b81de929e193e3744ddfb6f8aef3e7e15c3d57b769e65e5873", "approved_patch_hash": "67f92863943f054d7e3dd47a15cb309e407f66b2953d9878dd7f7afb316d44dd"}
+  ],
+  "operations": [
+    {"op": "set", "document_id": "SOP-AXLE-SYN", "path": "revision", "value": "B2"}
+  ]
+}

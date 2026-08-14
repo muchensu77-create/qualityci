@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/approval-assertion.schema.json",
+  "title": "QualityCI ApprovalAssertion 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "assertion_contract_version", "approval_id", "approval_subject_hash",
+    "decision", "approver_id_claim", "role_claim",
+    "authorization_record_id", "authorization_record_hash", "issued_at",
+    "effective_from", "expires_at"
+  ],
+  "properties": {
+    "assertion_contract_version": {"const": "qualityci-approval-assertion-0.1"},
+    "approval_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "approval_subject_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "decision": {"const": "APPROVED"},
+    "approver_id_claim": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "role_claim": {"enum": ["PROCESS_OWNER", "QUALITY_MANAGER"]},
+    "authorization_record_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "authorization_record_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "issued_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\\.[0-9]+)?Z$"
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\\.[0-9]+)?Z$"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\\.[0-9]+)?Z$"
+    }
+  }
+}

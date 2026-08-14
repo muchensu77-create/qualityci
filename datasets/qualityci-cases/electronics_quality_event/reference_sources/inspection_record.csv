@@ -1,0 +1,2 @@
+process_step_id,characteristic_id,target,minimum,maximum,unit,sop_document_id,sop_revision,control_plan_document_id,control_plan_revision
+ASSEMBLE-20,CTQ-CONNECTOR-TORQUE,0.8,0.75,0.85,N_m,SOP-ELEC-SYN,C,CP-ELEC-SYN,C

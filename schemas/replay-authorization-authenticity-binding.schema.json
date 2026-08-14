@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/replay-authorization-authenticity-binding.schema.json",
+  "title": "QualityCI Replay Authorization Authenticity Binding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "resolution_id", "replay_admission_hash",
+    "approval_subject_hash", "approval_assertion_set_hash",
+    "authorization_record_set_hash", "authorization_record_set_contract_version",
+    "authorization_authenticity_state", "authorization_authenticity_context_hash",
+    "authorization_authenticity_binding_hash", "authorization_trust_snapshot_hash",
+    "authorization_trust_snapshot_contract_version", "authorization_trust_policy_hash",
+    "authorization_trust_policy_version", "after_case_hash", "after_run_id"
+  ],
+  "properties": {
+    "contract_version": {"const": "qualityci-replay-authorization-authenticity-binding-0.1"},
+    "resolution_id": {"type": "string", "minLength": 1, "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F])\\S(?:[\\s\\S]*\\S)?$"},
+    "replay_admission_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "approval_subject_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "approval_assertion_set_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_record_set_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_record_set_contract_version": {"const": "qualityci-authorization-record-set-0.2"},
+    "authorization_authenticity_state": {"const": "PASS"},
+    "authorization_authenticity_context_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_authenticity_binding_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_trust_snapshot_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_trust_snapshot_contract_version": {"const": "qualityci-authorization-trust-snapshot-0.1"},
+    "authorization_trust_policy_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "authorization_trust_policy_version": {"const": "qualityci-authorization-trust-policy-0.1"},
+    "after_case_hash": {"type": "string", "minLength": 64, "maxLength": 64, "pattern": "^[0-9a-f]{64}$"},
+    "after_run_id": {"type": "string", "minLength": 16, "maxLength": 16, "pattern": "^[0-9a-f]{16}$"}
+  }
+}

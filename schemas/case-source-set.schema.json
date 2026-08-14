@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/case-source-set.schema.json",
+  "title": "QualityCI Case source set 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_set_hash",
+    "source_set_contract_version",
+    "source_pack_contract_version",
+    "builder_manifest",
+    "members"
+  ],
+  "properties": {
+    "source_set_hash": {"$ref": "#/$defs/hash"},
+    "source_set_contract_version": {"const": "qualityci-case-source-set-0.1"},
+    "source_pack_contract_version": {"const": "qualityci-case-source-pack-0.1"},
+    "builder_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_hash", "size_bytes"],
+      "properties": {
+        "source_hash": {"$ref": "#/$defs/hash"},
+        "size_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "members": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "prefixItems": [
+        {"$ref": "#/$defs/processFlowMember"},
+        {"$ref": "#/$defs/pfmeaMember"},
+        {"$ref": "#/$defs/controlPlanMember"},
+        {"$ref": "#/$defs/sopMember"},
+        {"$ref": "#/$defs/inspectionRecordMember"}
+      ],
+      "items": false
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonblank": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![\\s\\S]*[\\u0000-\\u001F\\u007F])\\S(?:[\\s\\S]*\\S)?$"
+    },
+    "xlsxSheetSelector": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 31,
+      "pattern": "^(?=[\\s\\S]*\\S)(?!')(?![\\s\\S]*'$)(?![\\s\\S]*[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F\\[\\]:*?/\\\\])[\\s\\S]*$"
+    },
+    "sourcePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^(?!\\s)(?![\\s\\S]*\\s$)(?![\\s\\S]*[\\u0000-\\u001F\\u007F])(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//)(?!.*\\\\)(?!.*(?:^|/)\\.(?:/|$))(?=.+\\.(?:[Cc][Ss][Vv]|[Xx][Ll][Ss][Xx]|[Dd][Oo][Cc][Xx])$).+[^/]$"
+    },
+    "member": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document_type",
+        "source_id",
+        "source_path",
+        "source_kind",
+        "size_bytes",
+        "source_hash",
+        "declared_table_selector"
+      ],
+      "properties": {
+        "document_type": {
+          "enum": [
+            "PROCESS_FLOW",
+            "PFMEA",
+            "CONTROL_PLAN",
+            "SOP",
+            "INSPECTION_RECORD"
+          ]
+        },
+        "source_id": {"$ref": "#/$defs/nonblank"},
+        "source_path": {"$ref": "#/$defs/sourcePath"},
+        "source_kind": {"enum": ["CSV", "XLSX", "DOCX"]},
+        "size_bytes": {"type": "integer", "minimum": 0},
+        "source_hash": {"$ref": "#/$defs/hash"},
+        "declared_table_selector": {"type": ["null", "object"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"source_kind": {"const": "CSV"}}, "required": ["source_kind"]},
+          "then": {
+            "properties": {
+              "source_path": {"pattern": "\\.[Cc][Ss][Vv]$"},
+              "declared_table_selector": {"type": "null"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"source_kind": {"const": "XLSX"}}, "required": ["source_kind"]},
+          "then": {
+            "properties": {
+              "source_path": {"pattern": "\\.[Xx][Ll][Ss][Xx]$"},
+              "declared_table_selector": {
+                "oneOf": [
+                  {"type": "null"},
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["sheet"],
+                    "properties": {
+                      "sheet": {"$ref": "#/$defs/xlsxSheetSelector"}
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"source_kind": {"const": "DOCX"}}, "required": ["source_kind"]},
+          "then": {
+            "properties": {
+              "source_path": {"pattern": "\\.[Dd][Oo][Cc][Xx]$"},
+              "declared_table_selector": {
+                "oneOf": [
+                  {"type": "null"},
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["table"],
+                    "properties": {"table": {"type": "integer", "minimum": 1}}
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "processFlowMember": {
+      "allOf": [
+        {"$ref": "#/$defs/member"},
+        {"properties": {"document_type": {"const": "PROCESS_FLOW"}}}
+      ]
+    },
+    "pfmeaMember": {
+      "allOf": [
+        {"$ref": "#/$defs/member"},
+        {"properties": {"document_type": {"const": "PFMEA"}}}
+      ]
+    },
+    "controlPlanMember": {
+      "allOf": [
+        {"$ref": "#/$defs/member"},
+        {"properties": {"document_type": {"const": "CONTROL_PLAN"}}}
+      ]
+    },
+    "sopMember": {
+      "allOf": [
+        {"$ref": "#/$defs/member"},
+        {"properties": {"document_type": {"const": "SOP"}}}
+      ]
+    },
+    "inspectionRecordMember": {
+      "allOf": [
+        {"$ref": "#/$defs/member"},
+        {"properties": {"document_type": {"const": "INSPECTION_RECORD"}}}
+      ]
+    }
+  }
+}

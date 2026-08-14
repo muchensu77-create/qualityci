@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/replay-validation-binding.schema.json",
+  "title": "QualityCI Replay Validation Binding 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "resolution_id", "source_case_hash", "after_case_hash",
+    "after_run_id", "source_evidence_set_hash", "source_case_subject_hash",
+    "source_scope_digest", "resolved_evidence_set_hash",
+    "resolved_case_subject_hash", "resolved_scope_digest", "evidence_pair_hash",
+    "replay_admission_hash", "ruleset_version", "validation_contract_version"
+  ],
+  "properties": {
+    "contract_version": {"const": "qualityci-replay-validation-binding-0.1"},
+    "resolution_id": {"type": "string", "minLength": 1},
+    "source_case_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "after_case_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "after_run_id": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+    "source_evidence_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_case_subject_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_scope_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "resolved_evidence_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "resolved_case_subject_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "resolved_scope_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evidence_pair_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "replay_admission_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ruleset_version": {"const": "qci-rules-0.6.0"},
+    "validation_contract_version": {"const": "qualityci-validation-evidence-0.1"}
+  }
+}

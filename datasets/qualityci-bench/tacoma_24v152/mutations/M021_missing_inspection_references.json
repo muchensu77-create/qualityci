@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M021_MISSING_INSPECTION_REFERENCES",
+  "description": "检验记录缺少受控SOP与控制计划的版本引用字段。",
+  "operations": [
+    {"op": "delete", "document_id": "IR-AXLE-SYN", "path": "fields.references"}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "UNVERIFIABLE",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M027_HIGH_RISK_NO_APPROVALS",
+  "description": "高风险事件完全没有人工审批记录。",
+  "operations": [
+    {"op": "delete", "target": "event", "path": "approvals"}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "CONTRADICTED"
+  }
+}

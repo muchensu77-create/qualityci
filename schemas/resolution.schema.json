@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/resolution.schema.json",
+  "title": "QualityCI Human-Approved Resolution",
+  "type": "object",
+  "required": ["resolution_id", "description", "approvals", "operations"],
+  "properties": {
+    "resolution_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "replacement_set_id": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "description": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "approvals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["role", "decision", "case_id", "event_id", "event_revision", "approved_case_hash", "approved_patch_hash"],
+        "properties": {
+          "role": {"enum": ["QUALITY_MANAGER", "PROCESS_OWNER"]},
+          "decision": {"enum": ["APPROVED", "REJECTED", "CHANGES_REQUESTED"]},
+          "case_id": {"type": "string", "minLength": 1},
+          "event_id": {"type": "string", "minLength": 1},
+          "event_revision": {"type": "string", "minLength": 1},
+          "approved_case_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "approved_patch_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "comment": {"type": "string"}
+        }
+      }
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "allOf": [
+          {"$ref": "mutation.schema.json#/properties/operations/items"},
+          {"properties": {"target": {"const": "document"}}}
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualityci.local/schemas/proposal-preview.schema.json",
+  "title": "QualityCI Unattested Resolution Proposal Preview",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["state", "trusted", "eligible_for_baseline", "resolution_id", "proposal_id", "preview_findings"],
+  "properties": {
+    "state": {"const": "PROPOSED_UNATTESTED"},
+    "trusted": {"const": false},
+    "eligible_for_baseline": {"const": false},
+    "resolution_id": {"type": "string", "minLength": 1},
+    "proposal_id": {"pattern": "^[0-9a-f]{16}$"},
+    "preview_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule_id", "estimated_status", "summary"],
+        "properties": {
+          "rule_id": {"type": "string"},
+          "estimated_status": {"enum": ["PASS", "CONTRADICTED", "UNVERIFIABLE"]},
+          "summary": {"type": "string"}
+        }
+      }
+    }
+  },
+  "not": {
+    "anyOf": [
+      {"required": ["overall_status"]},
+      {"required": ["run_id"]},
+      {"required": ["case_hash"]},
+      {"required": ["baseline"]}
+    ]
+  }
+}

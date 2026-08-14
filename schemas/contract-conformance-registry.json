@@ -1,0 +1,261 @@
+{
+  "contract_version": "qualityci-schema-runtime-conformance-0.1",
+  "schema_draft": "https://json-schema.org/draft/2020-12/schema",
+  "schema_count": 27,
+  "format_checker": {
+    "required": true,
+    "formats": ["date", "date-time", "uri"],
+    "executable_formats": [
+      "qualityci-case-source-provenance-url",
+      "qualityci-revision-source-path"
+    ]
+  },
+  "external_refs": {
+    "unique_targets": [
+      "https://qualityci.local/schemas/approval-subject.schema.json",
+      "https://qualityci.local/schemas/case.schema.json",
+      "https://qualityci.local/schemas/mutation.schema.json",
+      "https://qualityci.local/schemas/validation-approval-policy.schema.json"
+    ],
+    "occurrences": 15
+  },
+  "relation_types": [
+    "EXACT_SHAPE",
+    "SCHEMA_SUPERSET_SEMANTIC_REFINEMENT",
+    "RAW_ONLY",
+    "OUTPUT_ONLY",
+    "PROFILE_SPLIT"
+  ],
+  "closed_runtime_only_invariants": [
+    "CANONICAL_RAW_BYTES",
+    "MANIFEST_MEMBER_EXACT_JOIN",
+    "RAW_BYTE_HASH_JOIN",
+    "NORMALIZED_UNIQUENESS_AND_FK",
+    "CROSS_FIELD_HASH_DERIVATION",
+    "STATIC_TIME_ORDERING",
+    "SEALED_SIGNATURE_AND_SUBJECT_JOIN",
+    "AGGREGATE_BYTE_COUNT_DEPTH"
+  ],
+  "generator_categories": [
+    "positive",
+    "required",
+    "extra",
+    "type",
+    "format",
+    "bounds",
+    "conditional"
+  ],
+  "contracts": [
+    {
+      "schema_file": "approval-assertion.schema.json",
+      "$id": "https://qualityci.local/schemas/approval-assertion.schema.json",
+      "relation": "SCHEMA_SUPERSET_SEMANTIC_REFINEMENT",
+      "runtime_surface": "qualityci.approval_subject.validate_approval_assertion_shape",
+      "allowed_runtime_only_invariants": ["STATIC_TIME_ORDERING", "SEALED_SIGNATURE_AND_SUBJECT_JOIN"]
+    },
+    {
+      "schema_file": "approval-consumption.schema.json",
+      "$id": "https://qualityci.local/schemas/approval-consumption.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.store approval-consumption emission/rebuild",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "approval-subject.schema.json",
+      "$id": "https://qualityci.local/schemas/approval-subject.schema.json",
+      "relation": "SCHEMA_SUPERSET_SEMANTIC_REFINEMENT",
+      "runtime_surface": "qualityci.approval_subject.validate_approval_subject",
+      "allowed_runtime_only_invariants": ["CROSS_FIELD_HASH_DERIVATION"]
+    },
+    {
+      "schema_file": "authorization-authenticity-decision.schema.json",
+      "$id": "https://qualityci.local/schemas/authorization-authenticity-decision.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.authorization_authenticity context exact-field projection (no public emitter)",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "authorization-record-pack.schema.json",
+      "$id": "https://qualityci.local/schemas/authorization-record-pack.schema.json",
+      "relation": "RAW_ONLY",
+      "runtime_surface": "qualityci.authorization_records.AuthorizationRecordBundle",
+      "allowed_runtime_only_invariants": ["CANONICAL_RAW_BYTES", "MANIFEST_MEMBER_EXACT_JOIN", "RAW_BYTE_HASH_JOIN", "NORMALIZED_UNIQUENESS_AND_FK", "AGGREGATE_BYTE_COUNT_DEPTH"]
+    },
+    {
+      "schema_file": "authorization-record.schema.json",
+      "$id": "https://qualityci.local/schemas/authorization-record.schema.json",
+      "relation": "RAW_ONLY",
+      "runtime_surface": "qualityci.authorization_records record parser",
+      "allowed_runtime_only_invariants": ["CANONICAL_RAW_BYTES", "STATIC_TIME_ORDERING", "SEALED_SIGNATURE_AND_SUBJECT_JOIN"]
+    },
+    {
+      "schema_file": "authorization-trust-snapshot.schema.json",
+      "$id": "https://qualityci.local/schemas/authorization-trust-snapshot.schema.json",
+      "relation": "RAW_ONLY",
+      "runtime_surface": "qualityci.authorization_authenticity.AuthorizationTrustSnapshotBundle",
+      "allowed_runtime_only_invariants": ["CANONICAL_RAW_BYTES", "NORMALIZED_UNIQUENESS_AND_FK", "STATIC_TIME_ORDERING", "SEALED_SIGNATURE_AND_SUBJECT_JOIN", "AGGREGATE_BYTE_COUNT_DEPTH"]
+    },
+    {
+      "schema_file": "baseline-approval-binding.schema.json",
+      "$id": "https://qualityci.local/schemas/baseline-approval-binding.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.store baseline approval binding emission/rebuild",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "case.schema.json",
+      "$id": "https://qualityci.local/schemas/case.schema.json",
+      "relation": "SCHEMA_SUPERSET_SEMANTIC_REFINEMENT",
+      "runtime_surface": "qualityci.loader.validate_case/prepare_case",
+      "allowed_runtime_only_invariants": ["NORMALIZED_UNIQUENESS_AND_FK", "CROSS_FIELD_HASH_DERIVATION", "STATIC_TIME_ORDERING"]
+    },
+    {
+      "schema_file": "case-source-lineage.schema.json",
+      "$id": "https://qualityci.local/schemas/case-source-lineage.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.case_source_assurance CaseSourceLineage emission/store byte rebuild",
+      "allowed_runtime_only_invariants": ["CANONICAL_RAW_BYTES", "RAW_BYTE_HASH_JOIN", "CROSS_FIELD_HASH_DERIVATION", "NORMALIZED_UNIQUENESS_AND_FK"]
+    },
+    {
+      "schema_file": "case-source-pack.schema.json",
+      "$id": "https://qualityci.local/schemas/case-source-pack.schema.json",
+      "relation": "RAW_ONLY",
+      "runtime_surface": "qualityci.case_source_assurance CaseSourceBundle manifest parser plus five owned members",
+      "allowed_runtime_only_invariants": ["CANONICAL_RAW_BYTES", "MANIFEST_MEMBER_EXACT_JOIN", "RAW_BYTE_HASH_JOIN", "NORMALIZED_UNIQUENESS_AND_FK", "AGGREGATE_BYTE_COUNT_DEPTH"]
+    },
+    {
+      "schema_file": "case-source-set.schema.json",
+      "$id": "https://qualityci.local/schemas/case-source-set.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.case_source_assurance CaseSourceSet emission/store byte rebuild",
+      "allowed_runtime_only_invariants": ["CROSS_FIELD_HASH_DERIVATION"]
+    },
+    {
+      "schema_file": "controlled-reference-pack.schema.json",
+      "$id": "https://qualityci.local/schemas/controlled-reference-pack.schema.json",
+      "relation": "RAW_ONLY",
+      "runtime_surface": "qualityci.controlled_references.ControlledReferenceBundle",
+      "allowed_runtime_only_invariants": ["CANONICAL_RAW_BYTES", "MANIFEST_MEMBER_EXACT_JOIN", "RAW_BYTE_HASH_JOIN", "NORMALIZED_UNIQUENESS_AND_FK", "AGGREGATE_BYTE_COUNT_DEPTH"]
+    },
+    {
+      "schema_file": "mutation.schema.json",
+      "$id": "https://qualityci.local/schemas/mutation.schema.json",
+      "relation": "PROFILE_SPLIT",
+      "runtime_surface": "benchmark envelope versus qualityci.loader.apply_mutation",
+      "allowed_runtime_only_invariants": [],
+      "profiles": [
+        {"profile": "BENCHMARK_ENVELOPE", "role": "Schema validates mutation fixture metadata plus operations"},
+        {"profile": "RUNTIME_APPLY_MUTATION", "role": "Runtime consumes mutation_id plus operations and does not consume benchmark expectation metadata"}
+      ]
+    },
+    {
+      "schema_file": "proposal-preview.schema.json",
+      "$id": "https://qualityci.local/schemas/proposal-preview.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.workflow.ProposalPreview.to_dict",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "replay-admission.schema.json",
+      "$id": "https://qualityci.local/schemas/replay-admission.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.store ReplayAdmission emission/rebuild",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "replay-approval-expectation.schema.json",
+      "$id": "https://qualityci.local/schemas/replay-approval-expectation.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.store replay approval expectation emission/rebuild",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "replay-authorization-authenticity-binding.schema.json",
+      "$id": "https://qualityci.local/schemas/replay-authorization-authenticity-binding.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.store A06 authenticity binding emission/rebuild",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "replay-ledger.schema.json",
+      "$id": "https://qualityci.local/schemas/replay-ledger.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.store ReplayLedger emission/rebuild",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "replay-validation-binding.schema.json",
+      "$id": "https://qualityci.local/schemas/replay-validation-binding.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.store A04 validation binding emission/rebuild",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "resolution.schema.json",
+      "$id": "https://qualityci.local/schemas/resolution.schema.json",
+      "relation": "PROFILE_SPLIT",
+      "runtime_surface": "legacy approved resolution versus proposal/native resolution roles",
+      "allowed_runtime_only_invariants": [],
+      "profiles": [
+        {"profile": "LEGACY_APPROVED_RESOLUTION", "role": "Published Schema with embedded approvals"},
+        {"profile": "PROPOSAL_PREVIEW", "role": "Untrusted preview input/output path"},
+        {"profile": "NATIVE_APPROVAL_FREE_RESOLUTION", "role": "A05 native resolution whose approvals are supplied by sealed sidecars"}
+      ]
+    },
+    {
+      "schema_file": "revision-artifact-manifest.schema.json",
+      "$id": "https://qualityci.local/schemas/revision-artifact-manifest.schema.json",
+      "relation": "RAW_ONLY",
+      "runtime_surface": "qualityci.revision_artifacts revision artifact manifest parser",
+      "allowed_runtime_only_invariants": ["CANONICAL_RAW_BYTES", "MANIFEST_MEMBER_EXACT_JOIN", "RAW_BYTE_HASH_JOIN", "NORMALIZED_UNIQUENESS_AND_FK", "AGGREGATE_BYTE_COUNT_DEPTH"]
+    },
+    {
+      "schema_file": "revision-artifact-subject.schema.json",
+      "$id": "https://qualityci.local/schemas/revision-artifact-subject.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.revision_artifacts artifact subject emission/rebuild",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "run-result.schema.json",
+      "$id": "https://qualityci.local/schemas/run-result.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.models.RunResult.to_dict/store rebuild",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "validation-approval-policy.schema.json",
+      "$id": "https://qualityci.local/schemas/validation-approval-policy.schema.json",
+      "relation": "OUTPUT_ONLY",
+      "runtime_surface": "qualityci.validation_evidence validation policy emission/rebuild",
+      "allowed_runtime_only_invariants": []
+    },
+    {
+      "schema_file": "validation-evidence-pack.schema.json",
+      "$id": "https://qualityci.local/schemas/validation-evidence-pack.schema.json",
+      "relation": "RAW_ONLY",
+      "runtime_surface": "qualityci.validation_evidence.ValidationEvidenceBundle",
+      "allowed_runtime_only_invariants": ["CANONICAL_RAW_BYTES", "MANIFEST_MEMBER_EXACT_JOIN", "RAW_BYTE_HASH_JOIN", "NORMALIZED_UNIQUENESS_AND_FK", "AGGREGATE_BYTE_COUNT_DEPTH"]
+    },
+    {
+      "schema_file": "validation-report.schema.json",
+      "$id": "https://qualityci.local/schemas/validation-report.schema.json",
+      "relation": "RAW_ONLY",
+      "runtime_surface": "qualityci.validation_evidence raw report parser/gate",
+      "allowed_runtime_only_invariants": ["CANONICAL_RAW_BYTES", "CROSS_FIELD_HASH_DERIVATION", "STATIC_TIME_ORDERING", "SEALED_SIGNATURE_AND_SUBJECT_JOIN"],
+      "semantic_claim_join_consumer": "qualityci.rules.QCI-R006->CONTRADICTED",
+      "semantic_claim_joins": [
+        "event_id",
+        "event_revision",
+        "scope_digest",
+        "case_subject_hash",
+        "evidence_type",
+        "claim",
+        "issuer_id",
+        "issuer_role",
+        "ruleset_version",
+        "case_schema_version"
+      ]
+    }
+  ]
+}

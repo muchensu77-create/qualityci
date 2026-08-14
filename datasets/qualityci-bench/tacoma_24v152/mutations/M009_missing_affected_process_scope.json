@@ -1,0 +1,17 @@
+{
+  "mutation_id": "M009_MISSING_AFFECTED_PROCESS_SCOPE",
+  "description": "工程变更未声明受影响工序，无法验证工序覆盖。",
+  "operations": [
+    {"op": "set", "target": "event", "path": "affected_process_steps", "value": []},
+    {"op": "set", "target": "event", "path": "affected_links", "value": []}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "UNVERIFIABLE",
+    "QCI-R002": "UNVERIFIABLE",
+    "QCI-R003": "UNVERIFIABLE",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

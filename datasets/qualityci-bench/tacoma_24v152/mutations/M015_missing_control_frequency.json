@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M015_MISSING_CONTROL_FREQUENCY",
+  "description": "特殊特性条目保留规格、方法与反应计划，但缺少检验频次。",
+  "operations": [
+    {"op": "set", "document_id": "CP-AXLE-SYN", "path": "fields.characteristics", "value": [{"control_id": "CTRL-SPATTER-SEAT", "process_step_id": "WELD-10", "characteristic_id": "CTQ-NUT-SEAT-SPATTER", "specification": {"target": 0, "minimum": 0, "maximum": 0, "unit": "visible_particle"}, "control_method": "100%目视检查", "frequency": "", "reaction_plan": "隔离、清除焊渣、复检；损伤时升级评审", "locator": "ControlPlan!F12:K12"}]}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "CONTRADICTED",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

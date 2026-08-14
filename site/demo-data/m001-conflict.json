@@ -1,0 +1,22 @@
+{
+  "scenario_id": "conflict",
+  "synthetic": true,
+  "status": "CONTRADICTED",
+  "status_class": "is-conflict",
+  "title": "旧版 SOP 冲突被发现，但当前路径只能评估",
+  "copy": "系统定位到版本不一致；由于旧 Tacoma 目录没有匹配的整体原始源根，这次运行保持 EVALUATION_UNBOUND，不获得可信持久化或建基线权限。",
+  "points": [
+    "模式：RUN_EVALUATION_UNBOUND",
+    "规则结果：4 PASS、3 CONTRADICTED",
+    "处理：admission BLOCKED，不写可信结果"
+  ],
+  "result": {
+    "mode": "RUN_EVALUATION_UNBOUND",
+    "trusted": false,
+    "admission": "BLOCKED",
+    "overall_status": "CONTRADICTED",
+    "rules": 7,
+    "pass": 4,
+    "contradicted": 3
+  }
+}

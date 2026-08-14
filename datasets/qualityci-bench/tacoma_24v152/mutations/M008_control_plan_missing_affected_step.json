@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M008_CONTROL_PLAN_MISSING_AFFECTED_STEP",
+  "description": "控制计划遗漏受影响工序INSPECT-40，而PFMEA仍包含该工序。",
+  "operations": [
+    {"op": "set", "document_id": "CP-AXLE-SYN", "path": "fields.process_steps", "value": ["WELD-10", "CLEAN-20", "ASSEMBLE-30"]}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "CONTRADICTED",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

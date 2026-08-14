@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M020_STALE_SOP_DATE_CURRENT_REVISION",
+  "description": "SOP版本号仍为B且检验引用匹配，但修订日期早于变更批准，隔离验证修订日期时序规则。",
+  "operations": [
+    {"op": "set", "document_id": "SOP-AXLE-SYN", "path": "revision_date", "value": "2024-01-20"}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "CONTRADICTED",
+    "QCI-R005": "PASS",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}

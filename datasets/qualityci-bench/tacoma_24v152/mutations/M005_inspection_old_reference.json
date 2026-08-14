@@ -1,0 +1,16 @@
+{
+  "mutation_id": "M005_INSPECTION_OLD_REFERENCE",
+  "description": "检验记录仍引用旧版SOP。",
+  "operations": [
+    {"op": "set", "document_id": "IR-AXLE-SYN", "path": "fields.references.SOP.revision", "value": "A"}
+  ],
+  "expected_rule_statuses": {
+    "QCI-R001": "PASS",
+    "QCI-R002": "PASS",
+    "QCI-R003": "PASS",
+    "QCI-R004": "PASS",
+    "QCI-R005": "CONTRADICTED",
+    "QCI-R006": "PASS",
+    "QCI-R007": "PASS"
+  }
+}
