@@ -29,6 +29,7 @@ def test_public_site_is_static_synthetic_and_self_contained() -> None:
     nginx = (ROOT / "deploy" / "nginx-qualityci.conf.example").read_text(encoding="utf-8")
     nginx_limits = (ROOT / "deploy" / "nginx-qualityci-limits.conf.example").read_text(encoding="utf-8")
     gateway_unit = (ROOT / "deploy" / "qualityci-leader-gateway.service.example").read_text(encoding="utf-8")
+    pages_workflow = (ROOT / ".github" / "workflows" / "pages.yml").read_text(encoding="utf-8")
     experience = (SITE / "experience.html").read_text(encoding="utf-8")
     experience_app = (SITE / "experience.js").read_text(encoding="utf-8")
     experience_styles = (SITE / "experience.css").read_text(encoding="utf-8")
@@ -120,8 +121,20 @@ def test_public_site_is_static_synthetic_and_self_contained() -> None:
         "User-agent: *\nAllow: /\n\nSitemap: https://qualityci.com/sitemap.xml\n"
     )
     not_found = (SITE / "404.html").read_text(encoding="utf-8")
-    assert 'href="/styles.css"' in not_found
-    assert 'href="/"' in not_found
+    assert 'href="/qualityci/styles.css"' in not_found
+    assert 'href="/qualityci/"' in not_found
+    assert 'href="/styles.css"' not in not_found
+    assert 'href="/"' not in not_found
+    assert (SITE / ".nojekyll").is_file()
+    assert "contents: read" in pages_workflow
+    assert "pages: write" in pages_workflow
+    assert "id-token: write" in pages_workflow
+    assert "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" in pages_workflow
+    assert "actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9" in pages_workflow
+    assert "actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128" in pages_workflow
+    assert "path: site" in pages_workflow
+    assert "include-hidden-files: true" in pages_workflow
+    assert "persist-credentials: false" in pages_workflow
     assert "location = /api" in nginx
     assert "location ^~ /api/" in nginx
     assert "location = /api/v1/leader-answer" in nginx
@@ -145,6 +158,9 @@ def test_public_site_is_static_synthetic_and_self_contained() -> None:
     assert "<textarea" not in experience
     assert "leader-experience.v1" in experience_app
     assert 'const ENDPOINT = "/api/v1/leader-answer"' in experience_app
+    assert 'const IS_STATIC_MIRROR = window.location.hostname === "muchensu77-create.github.io"' in experience_app
+    assert "if (IS_STATIC_MIRROR)" in experience_app
+    assert "GitHub Pages 静态镜像／模型服务未接入" in experience_app
     assert "release_decision" in experience_app
     assert "blocking_reason" in experience_app
     assert "required_evidence" in experience_app

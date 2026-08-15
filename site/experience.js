@@ -6,6 +6,7 @@ const CONTRACT_VERSION = "leader-experience.v1";
 const CASE_ID = "qualityci-public-walkthrough-0.1";
 const PROMPT_VERSION = "leader-zh-v1";
 const ENDPOINT = "/api/v1/leader-answer";
+const IS_STATIC_MIRROR = window.location.hostname === "muchensu77-create.github.io";
 const QUESTION_IDS = ["release_decision", "blocking_reason", "required_evidence", "next_action"];
 const RESPONSE_KEYS = [
   "boundaries",
@@ -260,6 +261,15 @@ async function requestAnswer() {
   const questionId = selectedQuestion;
   const fallback = staticAnswer(scenarioId, questionId);
   renderAnswer(fallback);
+  if (IS_STATIC_MIRROR) {
+    renderAnswer(fallback, "GitHub Pages 静态镜像／模型服务未接入");
+    answerSheet.setAttribute("aria-busy", "false");
+    loading.hidden = true;
+    retryButton.hidden = true;
+    document.querySelector("[data-answer-announcer]").textContent =
+      `已显示静态镜像预审答案：${QUESTION_LABELS[questionId]}`;
+    return;
+  }
   answerSheet.setAttribute("aria-busy", "true");
   loading.hidden = false;
   retryButton.hidden = true;
