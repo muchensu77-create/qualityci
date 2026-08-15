@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="QualityCI 领导体验：使用三组合成案例和四个固定问题，查看确定性质量回归结论与受边界约束的模型解释。"
+    />
+    <meta name="theme-color" content="#211a17" />
+    <title>领导体验｜QualityCI</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./experience.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到领导体验</a>
+
+    <header class="experience-header">
+      <a class="experience-brand" href="./index.html" aria-label="返回 QualityCI 首页">
+        <span class="brand-mark latin" lang="en" aria-hidden="true">Q</span>
+        <span>
+          <strong class="latin" lang="en">QualityCI</strong>
+          <small>工业质量回归基础设施</small>
+        </span>
+      </a>
+      <div class="header-context">
+        <span>领导体验</span>
+        <span>合成案例</span>
+        <a href="./index.html">返回主叙事 <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main id="main" class="experience-shell">
+      <section class="experience-intro" aria-labelledby="experience-title">
+        <div>
+          <p class="chapter-label"><span>受控演示</span>领导决策预审台</p>
+          <h1 id="experience-title">先看规则事实<br />再读边界内的解释</h1>
+        </div>
+        <div class="intro-copy">
+          <p>
+            从三组合成质量回归案例中选择一种状态，再提出一个固定管理问题。页面优先请求同源服务；
+            超时、限流、服务不可用或响应不合约时，立即回到页面内预审静态答案。
+          </p>
+          <dl class="contract-strip" aria-label="体验契约">
+            <div><dt>案例</dt><dd>qualityci-public-walkthrough-0.1</dd></div>
+            <div><dt>问题</dt><dd>4 个固定 question_id</dd></div>
+            <div><dt>输入</dt><dd>无自由文本／无上传</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="leader-workspace" aria-label="领导体验工作区">
+        <div class="control-column">
+          <section class="scenario-panel" aria-labelledby="scenario-heading">
+            <div class="panel-heading">
+              <span>01</span>
+              <div><h2 id="scenario-heading">选择合成场景</h2><p>规则事实不会被模型改写</p></div>
+            </div>
+
+            <div class="scenario-tabs" role="tablist" aria-label="合成场景">
+              <button id="scenario-conflict" type="button" role="tab" aria-selected="true"
+                aria-controls="scenario-facts" tabindex="0" data-scenario="conflict">
+                <span>01</span><strong>发现冲突</strong><small>CONTRADICTED</small>
+              </button>
+              <button id="scenario-blocked" type="button" role="tab" aria-selected="false"
+                aria-controls="scenario-facts" tabindex="-1" data-scenario="blocked">
+                <span>02</span><strong>复跑阻断</strong><small>REPLAY BLOCKED</small>
+              </button>
+              <button id="scenario-ready" type="button" role="tab" aria-selected="false"
+                aria-controls="scenario-facts" tabindex="-1" data-scenario="ready">
+                <span>03</span><strong>待人评审</strong><small>READY FOR REVIEW</small>
+              </button>
+            </div>
+
+            <article id="scenario-facts" class="scenario-facts" role="tabpanel"
+              aria-labelledby="scenario-conflict">
+              <header>
+                <span data-scenario-status>CONTRADICTED</span>
+                <h3 data-scenario-title>旧版 SOP 冲突被发现，但当前路径只能评估</h3>
+              </header>
+              <dl>
+                <div><dt data-fact-label="mode">运行模式</dt><dd data-fact-mode>RUN_EVALUATION_UNBOUND</dd></div>
+                <div><dt data-fact-label="result">规则结果</dt><dd data-fact-result>4 PASS／3 CONTRADICTED／7 TOTAL</dd></div>
+                <div><dt data-fact-label="action">当前处置</dt><dd data-fact-action>admission BLOCKED／不写可信结果</dd></div>
+                <div><dt data-fact-label="source">来源边界</dt><dd data-fact-source>旧目录缺少匹配的整体原始源根</dd></div>
+              </dl>
+            </article>
+          </section>
+
+          <section class="question-panel" aria-labelledby="question-heading">
+            <div class="panel-heading">
+              <span>02</span>
+              <div><h2 id="question-heading">选择固定问题</h2><p>不接收自由文本</p></div>
+            </div>
+            <ol class="question-list">
+              <li>
+                <button type="button" data-question="release_decision" aria-pressed="true">
+                  <span>Q1</span><strong>现在能否进入放行评审</strong>
+                </button>
+              </li>
+              <li>
+                <button type="button" data-question="blocking_reason" aria-pressed="false">
+                  <span>Q2</span><strong>最关键的阻断原因是什么</strong>
+                </button>
+              </li>
+              <li>
+                <button type="button" data-question="required_evidence" aria-pressed="false">
+                  <span>Q3</span><strong>解除阻断还缺什么证据</strong>
+                </button>
+              </li>
+              <li>
+                <button type="button" data-question="next_action" aria-pressed="false">
+                  <span>Q4</span><strong>下一步应由谁做什么</strong>
+                </button>
+              </li>
+            </ol>
+          </section>
+        </div>
+
+        <article class="answer-sheet" aria-labelledby="answer-heading" aria-busy="false">
+          <header class="answer-header">
+            <div>
+              <span>03</span>
+              <div><p>受边界约束的管理解释</p><h2 id="answer-heading" tabindex="-1">现在能否进入放行评审</h2></div>
+            </div>
+            <div class="answer-mode">
+              <span data-answer-mode>static_fallback</span>
+              <small data-answer-note>页面内预审答案</small>
+            </div>
+          </header>
+
+          <div class="answer-loading" data-answer-loading hidden role="status">
+            正在请求同源受控解释；当前静态答案保持可见
+          </div>
+          <p class="sr-only" data-answer-announcer aria-live="polite"></p>
+
+          <section class="answer-summary" aria-labelledby="summary-heading">
+            <h3 id="summary-heading">结论摘要</h3>
+            <p data-answer-summary>
+              当前不能进入可信放行评审。M001 仍处于 RUN_EVALUATION_UNBOUND，且 7 条规则中有
+              3 条为 CONTRADICTED；系统准入保持 BLOCKED。
+            </p>
+          </section>
+
+          <div class="answer-detail-grid">
+            <section aria-labelledby="points-heading">
+              <h3 id="points-heading">管理要点</h3>
+              <ol class="text-ledger" data-answer-points>
+                <li>规则已定位跨文档版本冲突</li>
+                <li>旧目录缺少匹配的整体原始源根</li>
+                <li>不写可信结果，也不建立候选基线</li>
+              </ol>
+            </section>
+            <section aria-labelledby="evidence-heading">
+              <h3 id="evidence-heading">证据索引</h3>
+              <ol class="evidence-list" data-answer-evidence>
+                <li><code>M001_RUN_SUMMARY</code><span>M001 静态运行摘要</span></li>
+                <li><code>M001_RULE_COUNTS</code><span>七条规则计数</span></li>
+                <li><code>M001_SOURCE_ROOT</code><span>来源根边界</span></li>
+              </ol>
+            </section>
+          </div>
+
+          <section class="answer-boundaries" aria-labelledby="boundaries-heading">
+            <h3 id="boundaries-heading">不可越过的边界</h3>
+            <ol data-answer-boundaries>
+              <li>模型解释不能修改确定性规则结果、来源状态或准入结论</li>
+              <li>模型解释不能批准工艺参数，也不能自动放行产品</li>
+            </ol>
+          </section>
+
+          <footer class="answer-footer">
+            <p data-answer-contract>leader-experience.v1／leader-zh-v1／synthetic true</p>
+            <button type="button" data-retry hidden>重新请求同源解释</button>
+          </footer>
+        </article>
+      </section>
+
+      <section class="decision-boundary" aria-labelledby="decision-boundary-heading">
+        <div class="section-heading">
+          <span>04</span>
+          <div><h2 id="decision-boundary-heading">三层职责必须分开</h2><p>解释服务只位于中间一层</p></div>
+        </div>
+        <div class="boundary-grid">
+          <article><span>规则层</span><h3>确定事实</h3><p>三态规则、来源契约、准入状态和证据标识由 QualityCI 确定。</p></article>
+          <article><span>解释层</span><h3>组织阅读</h3><p>模型只能在固定问题和白名单证据内整理管理摘要，失败时回到静态预审。</p></article>
+          <article><span>责任层</span><h3>人工放行</h3><p>质量经理与工艺专家保留参数审批、例外接受和产品放行责任。</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="experience-footer">
+      <p>合成数据工程原型／不上传文件／不设置 Cookie／不使用本地存储</p>
+      <p class="latin" lang="en">QualityCI · leader-experience.v1</p>
+    </footer>
+
+    <noscript><p class="noscript-note">JavaScript 未启用；页面仍展示第一组预审静态答案，不会请求在线解释。</p></noscript>
+    <script src="./experience.js" defer></script>
+  </body>
+</html>

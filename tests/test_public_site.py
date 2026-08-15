@@ -24,8 +24,14 @@ class _AssetParser(HTMLParser):
 def test_public_site_is_static_synthetic_and_self_contained() -> None:
     index = (SITE / "index.html").read_text(encoding="utf-8")
     app = (SITE / "app.js").read_text(encoding="utf-8")
+    styles = (SITE / "styles.css").read_text(encoding="utf-8")
     manifest = json.loads((SITE / "demo-data" / "manifest.json").read_bytes())
     nginx = (ROOT / "deploy" / "nginx-qualityci.conf.example").read_text(encoding="utf-8")
+    nginx_limits = (ROOT / "deploy" / "nginx-qualityci-limits.conf.example").read_text(encoding="utf-8")
+    gateway_unit = (ROOT / "deploy" / "qualityci-leader-gateway.service.example").read_text(encoding="utf-8")
+    experience = (SITE / "experience.html").read_text(encoding="utf-8")
+    experience_app = (SITE / "experience.js").read_text(encoding="utf-8")
+    experience_styles = (SITE / "experience.css").read_text(encoding="utf-8")
 
     assert "QualityCI｜工业质量回归基础设施" in index
     assert "静态契约示意" in index
@@ -36,8 +42,47 @@ def test_public_site_is_static_synthetic_and_self_contained() -> None:
     assert 'property="og:image:height" content="630"' in index
     assert "https://github.com/muchensu77-create/qualityci" in index
     assert "待授权" not in index
+    assert "摘要哈希待校验" in index
+    assert "SHA-256 verified" not in index
+    assert 'data-regression-sequence' in index
+    assert 'data-sequence-phase="0"' in index
+    assert 'data-sequence-phase="3"' in index
+    assert 'data-case-summary' in index
+    assert 'data-case-detail' in index
+    assert 'data-open-evidence' in index
+    assert index.count('class="deck-page') == 4
+    assert 'data-page="overview"' in index
+    assert 'data-page="method"' in index
+    assert 'data-page="case"' in index
+    assert 'data-page="proof"' in index
+    assert 'data-page-prev' in index
+    assert 'data-page-next' in index
+    assert 'data-page-progress' in index
+    assert 'data-page-announcer' in index
+    assert 'class="nojs-scenarios"' in index
+    assert "A08_SOURCE_PACK_REQUIRED" in index
+    assert "READY_FOR_HUMAN_RELEASE_REVIEW" in index
+    assert "一次工程变更。" not in index
+    assert "FangSong" in styles
+    assert "Baskerville" in styles
+    assert "#1769e0" not in styles.lower()
+    assert ".hero-boundaries li::before" not in styles
+    assert "html:not(.js) .site-header" in styles
+    assert ".js .deck-footer" in styles
     assert "/api/" not in app
     assert 'selectScenario("conflict", initialTab)' in app
+    assert 'setHashStatus("本次浏览器校验已匹配", "matched")' in app
+    assert 'crypto.subtle.digest("SHA-256", raw)' in app
+    assert "setSequencePhase(0)" in app
+    assert "sequenceStage.dataset.phase" in app
+    assert 'document.startViewTransition' in app
+    assert 'activeViewTransition?.skipTransition()' in app
+    assert 'transition.finished.finally' in app
+    assert 'document.querySelector(".skip-link")?.addEventListener' in app
+    assert "pendingPageKey ?? currentPageKey" in app
+    assert "storyTransitionOwner === transition" in app
+    assert "EXPECTED_SCENARIOS" in app
+    assert "gsap" not in app.lower()
     assert manifest["synthetic"] is True
     assert manifest["contract_version"] == "qualityci-static-walkthrough-0.1"
     assert manifest["runtime_mode"] == "STATIC_CONTRACT_WALKTHROUGH"
@@ -79,16 +124,55 @@ def test_public_site_is_static_synthetic_and_self_contained() -> None:
     assert 'href="/"' in not_found
     assert "location = /api" in nginx
     assert "location ^~ /api/" in nginx
+    assert "location = /api/v1/leader-answer" in nginx
+    assert "proxy_pass http://127.0.0.1:8789" in nginx
+    assert nginx.count("proxy_pass") == 1
+    assert "client_max_body_size 1k" in nginx
+    assert "access_log off" in nginx
+    assert "qualityci_leader_per_ip" in nginx_limits
+    assert "qualityci_leader_global" in nginx_limits
+    assert "DynamicUser=yes" in gateway_unit
+    assert "NoNewPrivileges=yes" in gateway_unit
+    assert "ProtectSystem=strict" in gateway_unit
+    assert "IPAddressDeny=any" in gateway_unit
+    assert "IPAddressAllow=localhost" in gateway_unit
     assert 'X-Frame-Options "DENY"' in nginx
     assert "Strict-Transport-Security" in nginx
     assert "include /etc/nginx/mime.types" in nginx
-    assert "proxy_pass" not in nginx
+    assert "领导体验" in experience
+    assert "无自由文本／无上传" in experience
+    assert 'type="file"' not in experience
+    assert "<textarea" not in experience
+    assert "leader-experience.v1" in experience_app
+    assert 'const ENDPOINT = "/api/v1/leader-answer"' in experience_app
+    assert "release_decision" in experience_app
+    assert "blocking_reason" in experience_app
+    assert "required_evidence" in experience_app
+    assert "next_action" in experience_app
+    assert "static_fallback" in experience_app
+    assert "SOURCE_ROOTED_RUN／trusted true" in experience_app
+    assert "PASS／BOUND_RAW_SOURCE_CASE" in experience_app
+    assert "activeDeadline?.abort()" in experience_app
+    assert experience_app.rstrip().endswith("requestAnswer();")
+    assert "credentials: \"omit\"" in experience_app
+    assert "redirect: \"error\"" in experience_app
+    assert "localStorage" not in experience_app
+    assert "sessionStorage" not in experience_app
+    assert "document.cookie" not in experience_app
+    assert "innerHTML" not in experience_app
+    assert "textContent" in experience_app
+    assert "gsap" not in experience_app.lower()
+    assert "FangSong" in experience_styles
+    assert "Baskerville" in experience_styles
+    assert "#1769e0" not in experience_styles.lower()
+    assert "https://qualityci.com/experience.html" in (SITE / "sitemap.xml").read_text(encoding="utf-8")
 
     asset_notice = (SITE / "ASSET_NOTICE.md").read_text(encoding="utf-8")
     assert hashlib.sha256((SITE / "og.png").read_bytes()).hexdigest() in asset_notice
 
     parser = _AssetParser()
     parser.feed(index)
+    parser.feed(experience)
     for value in parser.assets:
         if value.startswith(("#", "https://", "mailto:")):
             continue

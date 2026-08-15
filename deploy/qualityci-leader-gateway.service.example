@@ -1,0 +1,42 @@
+[Unit]
+Description=QualityCI leader experience loopback gateway
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+WorkingDirectory=/opt/qualityci/leader-gateway
+ExecStart=/usr/bin/python3 /opt/qualityci/leader-gateway/leader_gateway.py --host 127.0.0.1 --port 8789
+Environment=PYTHONUTF8=1
+EnvironmentFile=-/etc/qualityci/leader-gateway.env
+Restart=on-failure
+RestartSec=2s
+TimeoutStartSec=10s
+TimeoutStopSec=5s
+UMask=0077
+NoNewPrivileges=yes
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectClock=yes
+ProtectControlGroups=yes
+ProtectHome=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectSystem=strict
+RestrictAddressFamilies=AF_INET AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+CapabilityBoundingSet=
+SystemCallArchitectures=native
+IPAddressDeny=any
+IPAddressAllow=localhost
+TasksMax=32
+MemoryMax=128M
+
+[Install]
+WantedBy=multi-user.target

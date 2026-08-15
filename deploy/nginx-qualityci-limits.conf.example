@@ -1,0 +1,3 @@
+# Install inside the nginx `http` context, for example under /etc/nginx/conf.d/.
+limit_req_zone $binary_remote_addr zone=qualityci_leader_per_ip:10m rate=3r/m;
+limit_conn_zone $server_name zone=qualityci_leader_global:1m;

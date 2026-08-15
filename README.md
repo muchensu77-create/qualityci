@@ -49,9 +49,12 @@ python -m qualityci.cli audit --db "$QCI_TMP/audit.sqlite"
 
 ## Demos
 
-- `site/` is a static contract walkthrough assembled from public-entry fields
-  for synthetic cases. It is not a raw run log; it uploads nothing, calls no
-  model, and exposes no Python API.
+- `site/` contains a static contract walkthrough assembled from public-entry
+  fields for synthetic cases. It is not a raw run log and uploads nothing.
+- `site/experience.html` is a constrained leadership Q&A surface. It accepts
+  only reviewed scenario/question IDs. The public gateway is loopback-only and
+  currently returns explicitly labelled pre-approved static answers; live
+  model access is disabled in this reviewed build.
 - `apps/web_demo/` and `qualityci.web_demo` provide the richer local demo. The
   server deliberately binds only to loopback and must not be exposed directly
   to a LAN or the public Internet.
